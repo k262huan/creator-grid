@@ -8,7 +8,7 @@
 ## Global Execution Rules
 
 - [x] Read `PRD.md` fully before changing code.
-- [ ] Confirm the repository's existing framework, package manager, and scripts before scaffolding or replacing files.
+- [x] Confirm the repository's existing framework, package manager, and scripts before scaffolding or replacing files.
 - [ ] Preserve existing working code unless a change is required by the PRD.
 - [ ] Use the lockfile's package manager and pin dependencies through the lockfile.
 - [ ] Use TypeScript strict mode, Zod validation, Drizzle ORM, and server-side authorization for privileged operations.
@@ -26,69 +26,69 @@
 
 ### 1.1 Inspect and prepare the project
 
-- [ ] Inspect the repository structure and identify the package manager from the existing lockfile.
-- [ ] Inspect `package.json` and record the existing scripts and dependency versions.
-- [ ] Confirm the project uses Next.js App Router and TypeScript, or scaffold the minimum required structure if no application exists.
-- [ ] Enable TypeScript strict mode in `tsconfig.json`.
-- [ ] Confirm linting and formatting conventions, adding consistent configuration only if missing.
-- [ ] Confirm `.gitignore` excludes `.env.local`, `.env.*.local`, build output, test artifacts, and local secrets.
-- [ ] Add a safe `.env.example` containing only documented variable names and placeholders.
-- [ ] Document the local setup sequence in `README.md`.
+- [x] Inspect the repository structure and identify the package manager from the existing lockfile.
+- [x] Inspect `package.json` and record the existing scripts and dependency versions.
+- [x] Confirm the project uses Next.js App Router and TypeScript, or scaffold the minimum required structure if no application exists.
+- [x] Enable TypeScript strict mode in `tsconfig.json`.
+- [x] Confirm linting and formatting conventions, adding consistent configuration only if missing.
+- [x] Confirm `.gitignore` excludes `.env.local`, `.env.*.local`, build output, test artifacts, and local secrets.
+- [x] Add a safe `.env.example` containing only documented variable names and placeholders.
+- [x] Document the local setup sequence in `README.md`.
 
 **Verification Gate 1A**
-- [ ] Run the package manager's install command and confirm dependencies install from the lockfile.
-- [ ] Run the existing lint and TypeScript-check scripts, or add those scripts if missing.
-- [ ] Run `npm run build` (or the equivalent package-manager command) and confirm the baseline application builds.
-- [ ] Inspect `git status` and confirm no secret file is staged or tracked.
+- [x] Run the package manager's install command and confirm dependencies install from the lockfile.
+- [x] Run the existing lint and TypeScript-check scripts, or add those scripts if missing.
+- [x] Run `npm run build` (or the equivalent package-manager command) and confirm the baseline application builds.
+- [x] Inspect `git status` and confirm no secret file is staged or tracked.
 
 ### 1.2 Define environment variables and validation
 
-- [ ] Create `.env.local` locally without adding it to version control.
-- [ ] Add `NEXT_PUBLIC_APP_URL` with the local development origin.
-- [ ] Add `DATABASE_URL` for the Neon PostgreSQL connection.
-- [ ] Add `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY`.
-- [ ] Add `CLERK_SECRET_KEY`.
-- [ ] Add `CLERK_WEBHOOK_SECRET`.
-- [ ] Add `STRIPE_SECRET_KEY` using a Stripe test-mode secret key.
-- [ ] Add `STRIPE_WEBHOOK_SECRET` for the local/test webhook endpoint.
-- [ ] Add `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY` using a Stripe test-mode publishable key.
-- [ ] Add `STRIPE_PRICE_CREATOR_PRO` for the configured test-mode Creator Pro price.
-- [ ] Add `STRIPE_PRICE_TEAM` for the configured test-mode Team price.
-- [ ] Add `NEXT_PUBLIC_IMAGEKIT_PUBLIC_KEY`.
-- [ ] Add `IMAGEKIT_PRIVATE_KEY`.
-- [ ] Add `NEXT_PUBLIC_IMAGEKIT_URL_ENDPOINT`.
-- [ ] Add `GEMINI_API_KEY`.
-- [ ] Add configurable `AI_DAILY_LIMIT_FREE`, `AI_DAILY_LIMIT_CREATOR_PRO`, and `AI_DAILY_LIMIT_TEAM` values.
-- [ ] Add configurable `MAX_UPLOAD_SIZE_BYTES` with the PRD's initial 10 MiB default.
-- [ ] Create a server-only environment schema using Zod.
-- [ ] Validate required environment variables before the associated integration is used.
-- [ ] Validate `NEXT_PUBLIC_APP_URL` as a trusted absolute URL.
-- [ ] Validate numeric limits as positive integers.
-- [ ] Keep secret variables out of any module imported by browser components.
-- [ ] Add a sanitized environment-validation helper that reports missing variable names without printing their values.
-- [ ] Ensure missing development values fail clearly rather than falling back to production credentials.
-- [ ] Ensure test-mode Stripe configuration is distinguishable from live configuration and reject live-mode keys in the MVP environment.
+- [x] Create `.env.local` locally without adding it to version control.
+- [x] Add `NEXT_PUBLIC_APP_URL` with the local development origin.
+- [x] Add `DATABASE_URL` for the Neon PostgreSQL connection.
+- [x] Add `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY`.
+- [x] Add `CLERK_SECRET_KEY`.
+- [x] Add `CLERK_WEBHOOK_SECRET`.
+- [x] Add `STRIPE_SECRET_KEY` using a Stripe test-mode secret key.
+- [x] Add `STRIPE_WEBHOOK_SECRET` for the local/test webhook endpoint.
+- [x] Add `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY` using a Stripe test-mode publishable key.
+- [x] Add `STRIPE_PRICE_CREATOR_PRO` for the configured test-mode Creator Pro price.
+- [x] Add `STRIPE_PRICE_TEAM` for the configured test-mode Team price.
+- [x] Add `NEXT_PUBLIC_IMAGEKIT_PUBLIC_KEY`.
+- [x] Add `IMAGEKIT_PRIVATE_KEY`.
+- [x] Add `NEXT_PUBLIC_IMAGEKIT_URL_ENDPOINT`.
+- [x] Add `GEMINI_API_KEY`.
+- [x] Add configurable `AI_DAILY_LIMIT_FREE`, `AI_DAILY_LIMIT_CREATOR_PRO`, and `AI_DAILY_LIMIT_TEAM` values.
+- [x] Add configurable `MAX_UPLOAD_SIZE_BYTES` with the PRD's initial 10 MiB default.
+- [x] Create a server-only environment schema using Zod.
+- [x] Validate required environment variables before the associated integration is used.
+- [x] Validate `NEXT_PUBLIC_APP_URL` as a trusted absolute URL.
+- [x] Validate numeric limits as positive integers.
+- [x] Keep secret variables out of any module imported by browser components.
+- [x] Add a sanitized environment-validation helper that reports missing variable names without printing their values.
+- [x] Ensure missing development values fail clearly rather than falling back to production credentials.
+- [x] Ensure test-mode Stripe configuration is distinguishable from live configuration and reject live-mode keys in the MVP environment.
 
 **Verification Gate 1B**
-- [ ] Run the environment schema's unit tests for valid, missing, malformed, and unsafe values.
-- [ ] Start the development server with required local variables configured and confirm it starts.
-- [ ] Remove one required variable temporarily and confirm the app reports a useful error without exposing secret values.
-- [ ] Search the repository and browser bundle for private-key literals and confirm none are present.
-- [ ] Run lint, TypeScript checks, and `npm run build`; confirm zero errors.
+- [x] Run the environment schema's unit tests for valid, missing, malformed, and unsafe values.
+- [x] Start the development server with required local variables configured and confirm it starts.
+- [x] Remove one required variable temporarily and confirm the app reports a useful error without exposing secret values.
+- [x] Search the repository and browser bundle for private-key literals and confirm none are present.
+- [x] Run lint, TypeScript checks, and `npm run build`; confirm zero errors.
 
 ### 1.3 Establish test and deployment configuration
 
-- [ ] Define separate environment-variable sets for local development, automated tests, preview, and production.
-- [ ] Document how to provision Neon, Clerk, Stripe test-mode resources, ImageKit, and Gemini credentials.
-- [ ] Document how to configure local Stripe webhook forwarding without exposing the signing secret.
-- [ ] Document how deployment-host secrets are configured without committing them.
-- [ ] Document the rule that production payment processing remains disabled until separately approved.
+- [x] Define separate environment-variable sets for local development, automated tests, preview, and production.
+- [x] Document how to provision Neon, Clerk, Stripe test-mode resources, ImageKit, and Gemini credentials.
+- [x] Document how to configure local Stripe webhook forwarding without exposing the signing secret.
+- [x] Document how deployment-host secrets are configured without committing them.
+- [x] Document the rule that production payment processing remains disabled until separately approved.
 
 **Verification Gate 1C**
-- [ ] Follow the README setup steps in a clean environment or fresh checkout.
-- [ ] Confirm `.env.example` contains placeholders only.
-- [ ] Confirm `.env.local` is ignored by Git.
-- [ ] Run lint, TypeScript checks, and `npm run build`; confirm all pass.
+- [x] Follow the README setup steps in a clean environment or fresh checkout.
+- [x] Confirm `.env.example` contains placeholders only.
+- [x] Confirm `.env.local` is ignored by Git.
+- [x] Run lint, TypeScript checks, and `npm run build`; confirm all pass.
 
 ---
 
