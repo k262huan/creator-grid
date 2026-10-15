@@ -9,16 +9,18 @@
 
 - [x] Read `PRD.md` fully before changing code.
 - [x] Confirm the repository's existing framework, package manager, and scripts before scaffolding or replacing files.
-- [ ] Preserve existing working code unless a change is required by the PRD.
-- [ ] Use the lockfile's package manager and pin dependencies through the lockfile.
+- [x] Preserve existing working code unless a change is required by the PRD.
+- [x] Use the lockfile's package manager and pin dependencies through the lockfile.
 - [ ] Use TypeScript strict mode, Zod validation, Drizzle ORM, and server-side authorization for privileged operations.
 - [ ] Use server components by default; add client components only for required interactivity.
 - [ ] Treat all client-supplied IDs, workspace IDs, plan identifiers, file metadata, and redirect values as untrusted.
-- [ ] Do not use hardcoded demo data as production functionality.
-- [ ] Keep `.env.local`, credentials, tokens, signing secrets, and provider responses containing sensitive data out of source control and logs.
-- [ ] Keep Stripe in test mode for all MVP work. Do not configure live payment processing.
-- [ ] Do not implement external social publishing or Phase 2 features.
+- [x] Do not use hardcoded demo data as production functionality.
+- [x] Keep `.env.local`, credentials, tokens, signing secrets, and provider responses containing sensitive data out of source control and logs.
+- [x] Keep Stripe in test mode for all MVP work. Do not configure live payment processing.
+- [x] Do not implement external social publishing or Phase 2 features.
 - [ ] After each major task group, run the specified Verification Gate and fix failures before continuing.
+
+> **Status note:** The remaining global rule on server-side authorization is pending because Clerk-protected operations and authorization helpers have not yet been implemented.
 
 ---
 
@@ -107,9 +109,12 @@
 - [x] Ensure runtime code uses parameterized Drizzle queries rather than string-interpolated SQL.
 
 **Verification Gate 2A**
+
 - [ ] Confirm the application can establish a database connection to the intended development database.
 - [x] Confirm the application fails safely when `DATABASE_URL` is missing or invalid.
 - [x] Run the TypeScript check and `npm run build`; confirm no server-only database code leaks into client bundles.
+
+> **Status note:** The live Neon connection check remains pending because `.env.local` contains safe placeholders and no development `DATABASE_URL` credential is available in this session.
 
 ### 2.2 Define core identity and workspace tables
 
@@ -122,10 +127,13 @@
 - [x] Define Drizzle relations for users, workspaces, and workspace membership.
 
 **Verification Gate 2B**
+
 - [x] Generate a migration and inspect it for correct foreign keys, unique constraints, and deletion behavior.
 - [ ] Apply the migration to a clean development database.
 - [ ] Run integration tests for identity uniqueness, membership uniqueness, and foreign-key failures.
 - [ ] Confirm default workspace creation can be made idempotent at the data layer.
+
+> **Status note:** Migration application, database integration tests, and idempotent data-layer verification require a configured clean development database and remain pending.
 
 ### 2.3 Define content and asset tables
 
@@ -146,10 +154,13 @@
 - [x] Define Drizzle relations for content, assets, content-asset associations, and performance metrics.
 
 **Verification Gate 2C**
+
 - [x] Generate and review the content/asset migration.
 - [ ] Apply all migrations to a clean database.
 - [ ] Test enum/check constraints, indexes, foreign keys, uniqueness, and invalid cross-workspace associations.
 - [x] Confirm all timestamps use timezone-aware PostgreSQL types where specified.
+
+> **Status note:** Clean-database application and constraint/integration tests remain pending until Neon development credentials are provisioned.
 
 ### 2.4 Define subscription, AI usage, consent, and webhook tables
 
@@ -166,11 +177,14 @@
 - [x] Add Drizzle relations for the new tables.
 
 **Verification Gate 2D**
+
 - [x] Generate and inspect the migration for subscription, AI usage, privacy-consent, and webhook tables.
 - [ ] Apply all migrations to a clean database.
 - [ ] Test uniqueness of Stripe event IDs and subscription IDs.
 - [ ] Test allowed plan/status constraints and foreign-key behavior.
 - [ ] Run all database integration tests.
+
+> **Status note:** Database-backed subscription, webhook, and foreign-key tests remain pending because no clean development database is configured.
 
 ### 2.5 Migrations, transaction helpers, and Row-Level Security
 
@@ -193,11 +207,14 @@
 - [ ] Add a clean-database migration test to verify migrations are reproducible.
 
 **Verification Gate 2E**
+
 - [ ] Apply all migrations from scratch to a clean test database.
 - [ ] Run RLS tests with two separate users/workspaces and confirm cross-workspace reads and writes fail.
 - [ ] Confirm runtime role privileges cannot bypass RLS.
 - [ ] Confirm transaction-local identity context does not leak between pooled connections.
 - [ ] Run database integration tests, lint, TypeScript checks, and `npm run build`.
+
+> **Status note:** Transaction identity helpers, RLS policies, runtime-role checks, and their clean-database verification have not been implemented; this remains the next database workstream after credentials are available.
 
 ---
 
