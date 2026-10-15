@@ -27,6 +27,19 @@ CreatorGrid is a Next.js App Router foundation for planning and producing creato
    npm run build
    ```
 
+## Database migrations
+
+Drizzle uses `DATABASE_URL` from the server environment. The runtime client is lazy and will not instantiate when the variable is missing or when the URL is not a TLS-required PostgreSQL URL.
+
+```bash
+npm run db:generate
+npm run db:check
+npm run db:migrate
+npm run db:studio
+```
+
+Review generated SQL under `src/db/migrations/` before applying it. Use an isolated Neon development database for local migration work and a separate least-privilege runtime role for the application where practical. Migration credentials belong only in the deployment or migration environment; do not place them in source control or browser code.
+
 The environment validator reports only missing or invalid variable names. It never prints variable values. Required provider variables are validated immediately before the corresponding server integration is used.
 
 ## Environment strategy

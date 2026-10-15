@@ -96,78 +96,77 @@
 
 ### 2.1 Install and configure Drizzle and Neon
 
-- [ ] Install compatible stable versions of `drizzle-orm`, the Neon PostgreSQL driver, `drizzle-kit`, and required TypeScript types.
-- [ ] Add scripts for schema generation, migration generation, migration application, and database inspection as appropriate to the selected driver.
-- [ ] Create `drizzle.config.ts` using server-side environment configuration.
-- [ ] Create `src/db/schema.ts`.
-- [ ] Create `src/db/index.ts` with a server-only database client.
-- [ ] Ensure the database client does not instantiate with missing credentials.
-- [ ] Configure TLS/secure connection settings appropriate to Neon.
-- [ ] Separate migration credentials from the least-privilege runtime database role where practical.
-- [ ] Ensure runtime code uses parameterized Drizzle queries rather than string-interpolated SQL.
+- [x] Install compatible stable versions of `drizzle-orm`, the Neon PostgreSQL driver, `drizzle-kit`, and required TypeScript types.
+- [x] Add scripts for schema generation, migration generation, migration application, and database inspection as appropriate to the selected driver.
+- [x] Create `drizzle.config.ts` using server-side environment configuration.
+- [x] Create `src/db/schema.ts`.
+- [x] Create `src/db/index.ts` with a server-only database client.
+- [x] Ensure the database client does not instantiate with missing credentials.
+- [x] Configure TLS/secure connection settings appropriate to Neon.
+- [x] Separate migration credentials from the least-privilege runtime database role where practical.
+- [x] Ensure runtime code uses parameterized Drizzle queries rather than string-interpolated SQL.
 
 **Verification Gate 2A**
 - [ ] Confirm the application can establish a database connection to the intended development database.
-- [ ] Confirm the application fails safely when `DATABASE_URL` is missing or invalid.
-- [ ] Run the TypeScript check and `npm run build`; confirm no server-only database code leaks into client bundles.
+- [x] Confirm the application fails safely when `DATABASE_URL` is missing or invalid.
+- [x] Run the TypeScript check and `npm run build`; confirm no server-only database code leaks into client bundles.
 
 ### 2.2 Define core identity and workspace tables
 
-- [ ] Define the `users` table with UUID primary key, unique `clerk_user_id`, email, display name, timezone, locale, privacy-notice fields, marketing-consent fields, and timestamps.
-- [ ] Define the `workspaces` table with UUID primary key, name, unique slug, owner user reference, workspace type, and timestamps.
-- [ ] Define the `workspace_members` table with workspace/user references, role, join timestamp, and unique `(workspace_id, user_id)` constraint.
-- [ ] Define foreign keys and deletion behavior for users, workspaces, and workspace members.
-- [ ] Add database constraints for supported workspace types and MVP membership roles.
-- [ ] Ensure workspace ownership cannot be silently transferred during user deletion.
-- [ ] Define Drizzle relations for users, workspaces, and workspace membership.
+- [x] Define the `users` table with UUID primary key, unique `clerk_user_id`, email, display name, timezone, locale, privacy-notice fields, marketing-consent fields, and timestamps.
+- [x] Define the `workspaces` table with UUID primary key, name, unique slug, owner user reference, workspace type, and timestamps.
+- [x] Define the `workspace_members` table with workspace/user references, role, join timestamp, and unique `(workspace_id, user_id)` constraint.
+- [x] Define foreign keys and deletion behavior for users, workspaces, and workspace members.
+- [x] Add database constraints for supported workspace types and MVP membership roles.
+- [x] Ensure workspace ownership cannot be silently transferred during user deletion.
+- [x] Define Drizzle relations for users, workspaces, and workspace membership.
 
 **Verification Gate 2B**
-- [ ] Generate a migration and inspect it for correct foreign keys, unique constraints, and deletion behavior.
+- [x] Generate a migration and inspect it for correct foreign keys, unique constraints, and deletion behavior.
 - [ ] Apply the migration to a clean development database.
 - [ ] Run integration tests for identity uniqueness, membership uniqueness, and foreign-key failures.
 - [ ] Confirm default workspace creation can be made idempotent at the data layer.
 
 ### 2.3 Define content and asset tables
 
-- [ ] Define the `content_items` table with workspace reference, creator and assignee references, title, description, content type, platform, status, brief, script, scheduled/published timestamps, archive timestamp, and created/updated timestamps.
-- [ ] Add database constraints for the supported content statuses: `idea`, `planned`, `in_production`, `in_review`, `approved`, `published`, and `archived`.
-- [ ] Add database constraints for the supported content types: video, podcast episode, short-form video, social-media post, blog article, and other.
-- [ ] Define the supported platform values or implement a controlled custom-platform value.
-- [ ] Add indexes for `(workspace_id, status)`, `(workspace_id, scheduled_at)`, and `(workspace_id, updated_at)`.
-- [ ] Define the `assets` table with workspace reference, uploader reference, ImageKit file ID, file name, delivery URL, MIME type, file size, and creation timestamp.
-- [ ] Add a unique constraint on `(workspace_id, imagekit_file_id)`.
-- [ ] Add an index on `assets.workspace_id`.
-- [ ] Define the `content_assets` join table with content and asset references, creation timestamp, and unique `(content_item_id, asset_id)` constraint.
-- [ ] Add an index on `content_assets.asset_id`.
-- [ ] Define `performance_metrics` with content reference, metric name, numeric value, recorded timestamp, and creation timestamp.
-- [ ] Add an index on `(content_item_id, recorded_at)`.
-- [ ] Define cross-table validation requirements so an asset and content item cannot be associated across workspaces.
-- [ ] Define deletion behavior so removing a content-asset association does not delete a shared underlying asset.
-- [ ] Define Drizzle relations for content, assets, content-asset associations, and performance metrics.
+- [x] Define the `content_items` table with workspace reference, creator and assignee references, title, description, content type, platform, status, brief, script, scheduled/published timestamps, archive timestamp, and created/updated timestamps.
+- [x] Add database constraints for the supported content statuses: `idea`, `planned`, `in_production`, `in_review`, `approved`, `published`, and `archived`.
+- [x] Add database constraints for the supported content types: video, podcast episode, short-form video, social-media post, blog article, and other.
+- [x] Define the supported platform values or implement a controlled custom-platform value.
+- [x] Add indexes for `(workspace_id, status)`, `(workspace_id, scheduled_at)`, and `(workspace_id, updated_at)`.
+- [x] Define the `assets` table with workspace reference, uploader reference, ImageKit file ID, file name, delivery URL, MIME type, file size, and creation timestamp.
+- [x] Add a unique constraint on `(workspace_id, imagekit_file_id)`.
+- [x] Add an index on `assets.workspace_id`.
+- [x] Define the `content_assets` join table with content and asset references, creation timestamp, and unique `(content_item_id, asset_id)` constraint.
+- [x] Add an index on `content_assets.asset_id`.
+- [x] Define `performance_metrics` with content reference, metric name, numeric value, recorded timestamp, and creation timestamp.
+- [x] Add an index on `(content_item_id, recorded_at)`.
+- [x] Define cross-table validation requirements so an asset and content item cannot be associated across workspaces.
+- [x] Define deletion behavior so removing a content-asset association does not delete a shared underlying asset.
+- [x] Define Drizzle relations for content, assets, content-asset associations, and performance metrics.
 
 **Verification Gate 2C**
-- [ ] Generate and review the content/asset migration.
+- [x] Generate and review the content/asset migration.
 - [ ] Apply all migrations to a clean database.
 - [ ] Test enum/check constraints, indexes, foreign keys, uniqueness, and invalid cross-workspace associations.
-- [ ] Confirm all timestamps use timezone-aware PostgreSQL types where specified.
-- [ ] Run database integration tests and the TypeScript check.
+- [x] Confirm all timestamps use timezone-aware PostgreSQL types where specified.
 
 ### 2.4 Define subscription, AI usage, consent, and webhook tables
 
-- [ ] Define `subscriptions` with workspace reference, plan key, Stripe customer/subscription/price identifiers, status, billing-period timestamps, cancellation flag, and timestamps.
-- [ ] Add constraints for plan keys `free`, `creator_pro`, and `team`.
-- [ ] Add constraints for allowed subscription statuses.
-- [ ] Add a unique constraint for non-null Stripe subscription identifiers and an index on `workspace_id`.
-- [ ] Define `ai_usage_events` with workspace/user references, provider, model, feature key, token counts, status, and timestamp.
-- [ ] Add an index on `(workspace_id, created_at)`.
-- [ ] Define `privacy_consents` with user reference, consent type, notice version, consented flag, consent/withdrawal timestamps, and creation timestamp.
-- [ ] Define `stripe_webhook_events` with unique Stripe event ID, event type, processing status, processed timestamp, and creation timestamp.
-- [ ] Add constraints for valid webhook processing states.
-- [ ] Avoid storing raw AI prompts, generated content, payment-card data, or unnecessary raw webhook payloads.
-- [ ] Add Drizzle relations for the new tables.
+- [x] Define `subscriptions` with workspace reference, plan key, Stripe customer/subscription/price identifiers, status, billing-period timestamps, cancellation flag, and timestamps.
+- [x] Add constraints for plan keys `free`, `creator_pro`, and `team`.
+- [x] Add constraints for allowed subscription statuses.
+- [x] Add a unique constraint for non-null Stripe subscription identifiers and an index on `workspace_id`.
+- [x] Define `ai_usage_events` with workspace/user references, provider, model, feature key, token counts, status, and timestamp.
+- [x] Add an index on `(workspace_id, created_at)`.
+- [x] Define `privacy_consents` with user reference, consent type, notice version, consented flag, consent/withdrawal timestamps, and creation timestamp.
+- [x] Define `stripe_webhook_events` with unique Stripe event ID, event type, processing status, processed timestamp, and creation timestamp.
+- [x] Add constraints for valid webhook processing states.
+- [x] Avoid storing raw AI prompts, generated content, payment-card data, or unnecessary raw webhook payloads.
+- [x] Add Drizzle relations for the new tables.
 
 **Verification Gate 2D**
-- [ ] Generate and inspect the migration for subscription, AI usage, privacy-consent, and webhook tables.
+- [x] Generate and inspect the migration for subscription, AI usage, privacy-consent, and webhook tables.
 - [ ] Apply all migrations to a clean database.
 - [ ] Test uniqueness of Stripe event IDs and subscription IDs.
 - [ ] Test allowed plan/status constraints and foreign-key behavior.
@@ -175,9 +174,9 @@
 
 ### 2.5 Migrations, transaction helpers, and Row-Level Security
 
-- [ ] Generate a baseline migration from the complete schema.
-- [ ] Review generated SQL before applying it.
-- [ ] Add a documented migration procedure for development and deployment.
+- [x] Generate a baseline migration from the complete schema.
+- [x] Review generated SQL before applying it.
+- [x] Add a documented migration procedure for development and deployment.
 - [ ] Add a transaction helper that verifies the Clerk session, resolves the application user, and sets a transaction-local trusted database user context.
 - [ ] Ensure the identity context and protected queries execute on the same transaction and database connection.
 - [ ] Enable RLS on workspace-owned tables.
