@@ -7,7 +7,7 @@
 
 ## Global Execution Rules
 
-- [ ] Read `PRD.md` fully before changing code.
+- [x] Read `PRD.md` fully before changing code.
 - [ ] Confirm the repository's existing framework, package manager, and scripts before scaffolding or replacing files.
 - [ ] Preserve existing working code unless a change is required by the PRD.
 - [ ] Use the lockfile's package manager and pin dependencies through the lockfile.
