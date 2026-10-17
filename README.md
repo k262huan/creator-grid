@@ -51,6 +51,19 @@ The environment validator reports only missing or invalid variable names. It nev
 
 `.env.local` and all other local environment files are ignored by Git. `.env.example` contains names and safe placeholders only.
 
+## Vercel deployment
+
+The GitHub repository is connected to the Vercel project `creator-grid`. Every push to `main` creates a Vercel production deployment after the Next.js build passes. Configure the variables from `.env.example` in Vercel Project Settings → Environment Variables for Preview and Production separately; never commit `.env.local` or provider secrets.
+
+Before enabling a deployment that uses database-backed routes:
+
+1. Apply the numbered Drizzle migrations to the target Neon database with the migration role: `npm run db:migrate`.
+2. Set `DATABASE_URL` at runtime to a TLS-required URL for a least-privilege role that does not have `SUPERUSER` or `BYPASSRLS`.
+3. Configure Clerk's allowed origins and redirect URLs for the Vercel deployment domain, including `/sign-in`, `/sign-up`, and `/app`.
+4. Configure the Stripe test webhook endpoint at `/api/stripe/webhook` only after the webhook route is implemented and signature verification is enabled.
+
+The Vercel build is credential-independent, but authenticated and database-backed acceptance tests require Preview environment variables and isolated test resources.
+
 ## Provider provisioning notes
 
 - Provision a Neon PostgreSQL database with TLS enabled and store its connection URL in `DATABASE_URL`.

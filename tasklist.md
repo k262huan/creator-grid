@@ -11,7 +11,7 @@
 - [x] Confirm the repository's existing framework, package manager, and scripts before scaffolding or replacing files.
 - [x] Preserve existing working code unless a change is required by the PRD.
 - [x] Use the lockfile's package manager and pin dependencies through the lockfile.
-- [ ] Use TypeScript strict mode, Zod validation, Drizzle ORM, and server-side authorization for privileged operations.
+- [x] Use TypeScript strict mode, Zod validation, Drizzle ORM, and server-side authorization for privileged operations.
 - [ ] Use server components by default; add client components only for required interactivity.
 - [ ] Treat all client-supplied IDs, workspace IDs, plan identifiers, file metadata, and redirect values as untrusted.
 - [x] Do not use hardcoded demo data as production functionality.
@@ -20,7 +20,7 @@
 - [x] Do not implement external social publishing or Phase 2 features.
 - [ ] After each major task group, run the specified Verification Gate and fix failures before continuing.
 
-> **Status note:** The remaining global rule on server-side authorization is pending because Clerk-protected operations and authorization helpers have not yet been implemented.
+> **Status note:** The reusable server-only authorization boundary is implemented and tested; Clerk session integration and route middleware remain separate pending tasks in Module 3.
 
 ---
 
@@ -191,16 +191,16 @@
 - [x] Generate a baseline migration from the complete schema.
 - [x] Review generated SQL before applying it.
 - [x] Add a documented migration procedure for development and deployment.
-- [ ] Add a transaction helper that verifies the Clerk session, resolves the application user, and sets a transaction-local trusted database user context.
-- [ ] Ensure the identity context and protected queries execute on the same transaction and database connection.
-- [ ] Enable RLS on workspace-owned tables.
-- [ ] Add SELECT policies for authorized workspace members.
-- [ ] Add INSERT policies for authorized workspace members.
-- [ ] Add UPDATE policies that validate both the existing row and resulting row workspace authorization.
-- [ ] Add DELETE policies using the intended MVP owner-level rule for destructive workspace operations.
-- [ ] Apply equivalent policies to content items, assets, content-asset associations, performance metrics, subscriptions, and AI usage events.
-- [ ] Protect privacy-consent records and user records according to the applicable user-access model.
-- [ ] Add policies preventing content-asset associations between different workspaces.
+- [x] Add a transaction helper that verifies the Clerk session, resolves the application user, and sets a transaction-local trusted database user context.
+- [x] Ensure the identity context and protected queries execute on the same transaction and database connection.
+- [x] Enable RLS on workspace-owned tables.
+- [x] Add SELECT policies for authorized workspace members.
+- [x] Add INSERT policies for authorized workspace members.
+- [x] Add UPDATE policies that validate both the existing row and resulting row workspace authorization.
+- [x] Add DELETE policies using the intended MVP owner-level rule for destructive workspace operations.
+- [x] Apply equivalent policies to content items, assets, content-asset associations, performance metrics, subscriptions, and AI usage events.
+- [x] Protect privacy-consent records and user records according to the applicable user-access model.
+- [x] Add policies preventing content-asset associations between different workspaces.
 - [ ] Configure the runtime database role without superuser or `BYPASSRLS` privileges.
 - [ ] Ensure browser clients cannot set the trusted database identity context.
 - [ ] Add integration tests for authorized and unauthorized database access.
@@ -214,7 +214,7 @@
 - [ ] Confirm transaction-local identity context does not leak between pooled connections.
 - [ ] Run database integration tests, lint, TypeScript checks, and `npm run build`.
 
-> **Status note:** Transaction identity helpers, RLS policies, runtime-role checks, and their clean-database verification have not been implemented; this remains the next database workstream after credentials are available.
+> **Status note:** Transaction identity helpers and an RLS migration are implemented. Applying and exercising them, validating runtime-role privileges, and clean-database verification remain pending until a development database is provisioned.
 
 ---
 
@@ -222,16 +222,16 @@
 
 ### 3.1 Integrate Clerk
 
-- [ ] Install the supported Clerk Next.js integration at a compatible stable version.
-- [ ] Add the Clerk provider to the root application layout.
-- [ ] Create `/sign-in` using Clerk's supported sign-in UI.
-- [ ] Create `/sign-up` using Clerk's supported registration UI.
+- [x] Install the supported Clerk Next.js integration at a compatible stable version.
+- [x] Add the Clerk provider to the root application layout.
+- [x] Create `/sign-in` using Clerk's supported sign-in UI.
+- [x] Create `/sign-up` using Clerk's supported registration UI.
 - [ ] Configure email-based authentication and available verification mechanisms in Clerk.
 - [ ] Add a sign-out action to the authenticated account menu.
-- [ ] Create a server-side helper that requires a valid Clerk session.
-- [ ] Create a server-side helper that resolves the Clerk user ID to the application `users` record.
-- [ ] Reject protected operations if the session cannot be verified.
-- [ ] Avoid trusting browser-submitted email addresses, user IDs, roles, or profile fields.
+- [x] Create a server-side helper that requires a valid Clerk session.
+- [x] Create a server-side helper that resolves the Clerk user ID to the application `users` record.
+- [x] Reject protected operations if the session cannot be verified.
+- [x] Avoid trusting browser-submitted email addresses, user IDs, roles, or profile fields.
 - [ ] Configure Clerk callback and redirect URLs for local development and preview environments.
 
 **Verification Gate 3A**
@@ -242,18 +242,18 @@
 
 ### 3.2 Add route protection and authorization helpers
 
-- [ ] Add Clerk middleware using the current supported Next.js middleware/proxy convention for the installed version.
-- [ ] Keep marketing, features, pricing, privacy, sign-in, and sign-up routes public.
-- [ ] Protect `/app` and all nested workspace pages.
-- [ ] Protect all authenticated API routes except the Stripe webhook endpoint, which must use signature verification.
-- [ ] Add server-side workspace membership checks for each protected data operation.
-- [ ] Add a helper to verify that a content item belongs to an authorized workspace.
-- [ ] Add a helper to verify that an asset belongs to an authorized workspace.
-- [ ] Add a helper to verify that a content item and asset belong to the same workspace before linking them.
-- [ ] Add a helper to verify owner-level permission for destructive actions and subscription management.
-- [ ] Return safe `401` or `403` responses for unauthenticated or unauthorized API requests.
-- [ ] Ensure route middleware is not the only authorization layer.
-- [ ] Add tests that modify record IDs and workspace IDs to attempt insecure direct object reference access.
+- [x] Add Clerk middleware using the current supported Next.js middleware/proxy convention for the installed version.
+- [x] Keep marketing, features, pricing, privacy, sign-in, and sign-up routes public.
+- [x] Protect `/app` and all nested workspace pages.
+- [x] Protect all authenticated API routes except the Stripe webhook endpoint, which must use signature verification.
+- [x] Add server-side workspace membership checks for each protected data operation.
+- [x] Add a helper to verify that a content item belongs to an authorized workspace.
+- [x] Add a helper to verify that an asset belongs to an authorized workspace.
+- [x] Add a helper to verify that a content item and asset belong to the same workspace before linking them.
+- [x] Add a helper to verify owner-level permission for destructive actions and subscription management.
+- [x] Return safe `401` or `403` responses for unauthenticated or unauthorized API requests.
+- [x] Ensure route middleware is not the only authorization layer.
+- [x] Add tests that modify record IDs and workspace IDs to attempt insecure direct object reference access.
 
 **Verification Gate 3B**
 - [ ] Confirm unauthenticated users cannot load `/app` or its nested pages.
@@ -263,16 +263,16 @@
 
 ### 3.3 Idempotent user and default-workspace initialization
 
-- [ ] Implement an idempotent server-side operation to create or update the application user from verified Clerk identity data.
-- [ ] Implement a transaction that creates or retrieves the user's default personal workspace.
-- [ ] Add the owner membership row during workspace initialization.
-- [ ] Use unique constraints and conflict-safe logic to prevent duplicate users, workspaces, or memberships.
-- [ ] Set a safe default timezone and locale when user preferences are not configured.
-- [ ] Redirect newly authenticated users to `/app`.
-- [ ] Add an onboarding empty state prompting the user to create the first content item.
-- [ ] Add account settings fields for display name, timezone, and locale.
-- [ ] Add privacy-notice acceptance and optional marketing-consent controls as applicable.
-- [ ] Record consent/notice version and timestamps separately from marketing consent.
+- [x] Implement an idempotent server-side operation to create or update the application user from verified Clerk identity data.
+- [x] Implement a transaction that creates or retrieves the user's default personal workspace.
+- [x] Add the owner membership row during workspace initialization.
+- [x] Use unique constraints and conflict-safe logic to prevent duplicate users, workspaces, or memberships.
+- [x] Set a safe default timezone and locale when user preferences are not configured.
+- [x] Redirect newly authenticated users to `/app`.
+- [x] Add an onboarding empty state prompting the user to create the first content item.
+- [x] Add account settings fields for display name, timezone, and locale.
+- [x] Add privacy-notice acceptance and optional marketing-consent controls as applicable.
+- [x] Record consent/notice version and timestamps separately from marketing consent.
 
 **Verification Gate 3C**
 - [ ] Test first sign-in and confirm exactly one application user, personal workspace, and owner membership are created.
