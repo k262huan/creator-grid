@@ -12,7 +12,7 @@
 - [x] Preserve existing working code unless a change is required by the PRD.
 - [x] Use the lockfile's package manager and pin dependencies through the lockfile.
 - [x] Use TypeScript strict mode, Zod validation, Drizzle ORM, and server-side authorization for privileged operations.
-- [ ] Use server components by default; add client components only for required interactivity.
+- [x] Use server components by default; add client components only for required interactivity. Audited all eight client components: each requires state, browser APIs, event handlers, uploads, or interactive error/retry behavior.
 - [ ] Treat all client-supplied IDs, workspace IDs, plan identifiers, file metadata, and redirect values as untrusted.
 - [x] Do not use hardcoded demo data as production functionality.
 - [x] Keep `.env.local`, credentials, tokens, signing secrets, and provider responses containing sensitive data out of source control and logs.
