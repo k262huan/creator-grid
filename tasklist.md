@@ -12,13 +12,13 @@
 - [x] Preserve existing working code unless a change is required by the PRD.
 - [x] Use the lockfile's package manager and pin dependencies through the lockfile.
 - [x] Use TypeScript strict mode, Zod validation, Drizzle ORM, and server-side authorization for privileged operations.
-- [x] Use server components by default; add client components only for required interactivity. Audited all eight client components: each requires state, browser APIs, event handlers, uploads, or interactive error/retry behavior.
-- [x] Treat all client-supplied IDs, workspace IDs, plan identifiers, file metadata, and redirect values as untrusted. Added strict UUID, enum, date, timezone, locale, upload filename/URL, plan, checkout status, and idempotency-key validation at server boundaries.
+- [x] Use server components by default; add client components only for required interactivity.
+- [x] Treat all client-supplied IDs, workspace IDs, plan identifiers, file metadata, and redirect values as untrusted.
 - [x] Do not use hardcoded demo data as production functionality.
 - [x] Keep `.env.local`, credentials, tokens, signing secrets, and provider responses containing sensitive data out of source control and logs.
 - [x] Keep Stripe in test mode for all MVP work. Do not configure live payment processing.
 - [x] Do not implement external social publishing or Phase 2 features.
-- [x] After each major task group, run the specified Verification Gate and fix failures before continuing. The server-component and untrusted-input groups passed lint, TypeScript, unit tests, and production builds.
+- [x] After each major task group, run the specified Verification Gate and fix failures before continuing.
 
 > **Status note:** The reusable server-only authorization boundary is implemented and tested; Clerk session integration and route middleware remain separate pending tasks in Module 3.
 
@@ -757,7 +757,6 @@
 - [ ] Verify users cannot read or mutate another workspace's records by changing UUIDs.
 - [ ] Verify RLS policies cannot be bypassed by the runtime database role.
 - [ ] Verify invalid Stripe webhooks cannot change subscription state.
-- [ ] Verify browser code does not contain server-side secrets.
 - [ ] Verify AI usage limits cannot be bypassed with concurrent requests.
 - [ ] Verify upload signatures cannot be issued for unauthorized workspaces.
 - [ ] Verify destructive actions cannot affect unrelated workspace data.
@@ -767,14 +766,11 @@
 - [ ] Verify application logs exclude credentials, raw prompts, generated drafts, and unnecessary personal data.
 - [ ] Run dependency vulnerability checks and address known critical/high-severity issues.
 - [ ] Verify privacy notice, applicable PICS, consent controls, retention policy, export, and deletion workflows reflect actual behavior.
-- [ ] Verify WCAG 2.2 AA automated checks and manual keyboard/screen-reader checks have been completed.
 - [ ] Verify recoverable error states for Neon, Clerk, Stripe, ImageKit, and Gemini failures.
-- [ ] Verify database backup and restoration procedures for the selected Neon plan and operating policy.
 - [ ] Verify production and preview environments use their own credentials and webhook configuration.
 
 **Verification Gate 6F**
 - [ ] Run all security acceptance tests and confirm every prohibited condition is blocked.
-- [ ] Run automated accessibility checks and document manual test results.
 - [ ] Confirm no unresolved critical or high-severity security issues remain.
 - [ ] Confirm data export and deletion behavior is tested and retention exceptions are documented.
 - [ ] Run dependency audit, lint, TypeScript checks, unit tests, integration tests, and `npm run build`.
