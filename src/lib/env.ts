@@ -28,7 +28,9 @@ const serverEnvSchema = z
     AI_DAILY_LIMIT_TEAM: positiveInteger.default(200),
     MAX_UPLOAD_SIZE_BYTES: positiveInteger.default(10 * 1024 * 1024),
   })
-  .strict();
+  // `process.env` includes platform and test-runner variables outside the
+  // application contract; validate known fields and ignore unrelated keys.
+  .passthrough();
 
 export type ServerEnv = z.infer<typeof serverEnvSchema>;
 

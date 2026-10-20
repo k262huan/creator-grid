@@ -1,7 +1,7 @@
 import "server-only";
 
-import { neon } from "@neondatabase/serverless";
-import { drizzle } from "drizzle-orm/neon-http";
+import { Pool } from "@neondatabase/serverless";
+import { drizzle } from "drizzle-orm/neon-serverless";
 import { z } from "zod";
 
 import * as schema from "./schema";
@@ -28,8 +28,8 @@ function getDatabaseUrl(): string {
 }
 
 function createDatabase() {
-  const sql = neon(getDatabaseUrl());
-  return drizzle(sql, { schema });
+  const pool = new Pool({ connectionString: getDatabaseUrl(), max: 1 });
+  return drizzle(pool, { schema });
 }
 
 export type Database = ReturnType<typeof createDatabase>;

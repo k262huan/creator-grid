@@ -287,21 +287,23 @@
 
 ### 4.1 Centralize plan configuration and entitlements
 
-- [ ] Create `src/lib/plans.ts` with the `free`, `creator_pro`, and `team` plan keys.
-- [ ] Define plan display names and configurable pricing/billing intervals.
-- [ ] Define configurable content limits, AI daily limits, upload-size limits, and feature flags.
-- [ ] Define plan capability flags for collaboration, client review, and advanced analytics without implementing deferred features.
-- [ ] Create a server-side entitlement resolver based on verified subscription state.
-- [ ] Enforce plan restrictions in server-side operations rather than only hiding UI.
-- [ ] Implement atomic or transaction-safe AI usage counting to prevent concurrent requests bypassing limits.
-- [ ] Ensure a plan downgrade never silently deletes content.
-- [ ] Add tests for default Free entitlements, paid entitlements, inactive subscriptions, cancellation, and limit exhaustion.
+- [x] Create `src/lib/plans.ts` with the `free`, `creator_pro`, and `team` plan keys.
+- [x] Define plan display names and configurable pricing/billing intervals.
+- [x] Define configurable content limits, AI daily limits, upload-size limits, and feature flags.
+- [x] Define plan capability flags for collaboration, client review, and advanced analytics without implementing deferred features.
+- [x] Create a server-side entitlement resolver based on verified subscription state.
+- [x] Enforce plan restrictions in server-side operations rather than only hiding UI.
+- [x] Implement atomic or transaction-safe AI usage counting to prevent concurrent requests bypassing limits.
+- [x] Ensure a plan downgrade never silently deletes content.
+- [x] Add tests for default Free entitlements, paid entitlements, inactive subscriptions, cancellation, and limit exhaustion.
 
 **Verification Gate 4A**
-- [ ] Run unit tests for plan mapping, entitlement resolution, and AI limit calculations.
-- [ ] Confirm client-controlled state cannot grant a paid plan.
-- [ ] Confirm AI limits are enforced server-side under concurrent requests.
-- [ ] Run lint, TypeScript checks, and `npm run build`.
+- [x] Run unit tests for plan mapping, entitlement resolution, and AI limit calculations.
+- [x] Confirm client-controlled state cannot grant a paid plan.
+- [ ] Confirm AI limits are enforced server-side under concurrent requests against a real PostgreSQL database.
+- [x] Run lint, TypeScript checks, and `npm run build`.
+
+> **Status note:** Plan configuration, verified subscription mapping, server-side content/AI quota guards, transaction-capable Neon pooling, and unit tests are implemented. Concurrent PostgreSQL verification remains pending until a development database is configured.
 
 ### 4.2 Integrate ImageKit uploads
 
