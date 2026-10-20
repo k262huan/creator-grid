@@ -427,19 +427,19 @@
 
 ### 5.2 Build authenticated workspace shell and dashboard
 
-- [ ] Build the authenticated layout for `/app`.
-- [ ] Add desktop sidebar navigation for Dashboard, Content, Calendar, Assets, and Settings.
-- [ ] Add a responsive mobile navigation drawer or equivalent accessible navigation.
-- [ ] Add workspace identity and an account menu with sign-out.
-- [ ] Add the dashboard welcome area and quick actions for new content and calendar.
-- [ ] Add database-backed content count cards by status.
-- [ ] Add the upcoming scheduled content list.
-- [ ] Add the recently updated content list.
-- [ ] Add current subscription plan display and a pricing/upgrade link.
-- [ ] Add an onboarding empty state for users with no content.
-- [ ] Add loading, error, and retry states to dashboard data sections.
-- [ ] Ensure all dashboard queries are scoped to the authenticated workspace.
-- [ ] Paginate lists where needed and avoid unnecessary client-side JavaScript.
+- [x] Build the authenticated layout for `/app`.
+- [x] Add desktop sidebar navigation for Dashboard, Content, Calendar, Assets, and Settings.
+- [x] Add a responsive mobile navigation drawer or equivalent accessible navigation.
+- [x] Add workspace identity and an account menu with sign-out.
+- [x] Add the dashboard welcome area and quick actions for new content and calendar.
+- [x] Add database-backed content count cards by status.
+- [x] Add the upcoming scheduled content list.
+- [x] Add the recently updated content list.
+- [x] Add current subscription plan display and a pricing/upgrade link.
+- [x] Add an onboarding empty state for users with no content.
+- [x] Add loading, error, and retry states to dashboard data sections.
+- [x] Ensure all dashboard queries are scoped to the authenticated workspace.
+- [x] Paginate lists where needed and avoid unnecessary client-side JavaScript.
 
 **Verification Gate 5B**
 - [ ] Sign in and confirm the dashboard loads database-backed data for the current workspace.
@@ -450,19 +450,19 @@
 
 ### 5.3 Implement content data access and CRUD operations
 
-- [ ] Create Zod schemas for content creation, updates, search, filters, sorting, status transitions, and deletion.
-- [ ] Create server-side content data-access functions scoped to an authorized workspace.
-- [ ] Implement content creation with title, description, type, platform, status, planned publication date, assignee, brief, and script fields.
-- [ ] Implement content retrieval by ID with workspace authorization.
-- [ ] Implement content updates with server-side validation and updated timestamps.
-- [ ] Implement content deletion with authorization and dependent-data handling.
-- [ ] Implement allowed status transitions and reject invalid transitions on the server.
-- [ ] Implement content search by title.
-- [ ] Implement filtering by status and platform.
-- [ ] Implement sorting by planned publication date and last update.
-- [ ] Implement pagination for larger content lists.
-- [ ] Ensure a client cannot assign content to an unauthorized user.
-- [ ] Add unit tests for status transition rules and content validation.
+- [x] Create Zod schemas for content creation, updates, search, filters, sorting, status transitions, and deletion.
+- [x] Create server-side content data-access functions scoped to an authorized workspace.
+- [x] Implement content creation with title, description, type, platform, status, planned publication date, assignee, brief, and script fields.
+- [x] Implement content retrieval by ID with workspace authorization.
+- [x] Implement content updates with server-side validation and updated timestamps.
+- [x] Implement content deletion with authorization and dependent-data handling.
+- [x] Implement allowed status transitions and reject invalid transitions on the server.
+- [x] Implement content search by title.
+- [x] Implement filtering by status and platform.
+- [x] Implement sorting by planned publication date and last update.
+- [x] Implement pagination for larger content lists.
+- [x] Ensure a client cannot assign content to an unauthorized user.
+- [x] Add unit tests for status transition rules and content validation.
 
 **Verification Gate 5C**
 - [ ] Test create, read, update, and delete operations against PostgreSQL.
@@ -474,26 +474,26 @@
 
 ### 5.4 Build content list, create form, and editor
 
-- [ ] Build `/app/content` with a database-backed content list.
-- [ ] Add title search to the content list.
-- [ ] Add status filter controls.
-- [ ] Add platform filter controls.
-- [ ] Add sort controls for publication date and last update.
-- [ ] Display content type, status, platform, and planned publication date for each item.
-- [ ] Add a create-content CTA linking to `/app/content/new`.
-- [ ] Build `/app/content/new` with labeled fields and validation feedback.
-- [ ] Redirect to the new content editor after successful creation.
-- [ ] Build `/app/content/[id]` with authorized loading and not-found/forbidden handling.
-- [ ] Divide the editor into Overview, Brief, Script/Caption, Assets, and Scheduling sections or tabs.
-- [ ] Add editable title, description, type, platform, status, assignee, and scheduling fields.
-- [ ] Add editable brief and script/caption fields.
-- [ ] Implement save actions through authenticated server-side operations.
-- [ ] Display saving, saved, and error states.
-- [ ] Preserve existing draft content when a save or provider request fails.
-- [ ] Warn users about unsaved changes when navigating away where practical.
-- [ ] Require confirmation for destructive content deletion.
-- [ ] Add a simple manually entered performance metrics interface for published content, with validated metric name and numeric value.
-- [ ] Do not implement automated cross-platform analytics.
+- [x] Build `/app/content` with a database-backed content list.
+- [x] Add title search to the content list.
+- [x] Add status filter controls.
+- [x] Add platform filter controls.
+- [x] Add sort controls for publication date and last update.
+- [x] Display content type, status, platform, and planned publication date for each item.
+- [x] Add a create-content CTA linking to `/app/content/new`.
+- [x] Build `/app/content/new` with labeled fields and validation feedback.
+- [x] Redirect to the new content editor after successful creation.
+- [x] Build `/app/content/[id]` with authorized loading and not-found/forbidden handling.
+- [x] Divide the editor into Overview, Brief, Script/Caption, Assets, and Scheduling sections or tabs.
+- [x] Add editable title, description, type, platform, status, assignee, and scheduling fields.
+- [x] Add editable brief and script/caption fields.
+- [x] Implement save actions through authenticated server-side operations.
+- [x] Display saving, saved, and error states.
+- [x] Preserve existing draft content when a save or provider request fails.
+- [x] Warn users about unsaved changes when navigating away where practical.
+- [x] Require confirmation for destructive content deletion.
+- [x] Add a simple manually entered performance metrics interface for published content, with validated metric name and numeric value.
+- [x] Do not implement automated cross-platform analytics.
 
 **Verification Gate 5D**
 - [ ] Complete the flow from creating an idea to editing its brief and script and reloading the page.
@@ -505,19 +505,19 @@
 
 ### 5.5 Implement calendar and timezone behavior
 
-- [ ] Build `/app/calendar`.
-- [ ] Implement month view navigation.
-- [ ] Implement week view navigation.
-- [ ] Display content items according to their planned publication timestamps.
-- [ ] Display title and status for each calendar entry without relying on color alone.
-- [ ] Allow authorized users to open content details from calendar entries.
-- [ ] Allow authorized users to update planned publication dates.
-- [ ] Display unscheduled content in a separate list or panel.
-- [ ] Add an accessible list alternative for calendar entries.
-- [ ] Use the user's configured timezone for display and date editing.
-- [ ] Handle timezone conversion without silently shifting saved timestamps.
-- [ ] Add a responsive calendar fallback for small screens.
-- [ ] Add loading, empty, and error states for calendar data.
+- [x] Build `/app/calendar`.
+- [x] Implement month view navigation.
+- [x] Implement week view navigation.
+- [x] Display content items according to their planned publication timestamps.
+- [x] Display title and status for each calendar entry without relying on color alone.
+- [x] Allow authorized users to open content details from calendar entries.
+- [x] Allow authorized users to update planned publication dates.
+- [x] Display unscheduled content in a separate list or panel.
+- [x] Add an accessible list alternative for calendar entries.
+- [x] Use the user's configured timezone for display and date editing.
+- [x] Handle timezone conversion without silently shifting saved timestamps.
+- [x] Add a responsive calendar fallback for small screens.
+- [x] Add loading, empty, and error states for calendar data.
 
 **Verification Gate 5E**
 - [ ] Test month and week views with scheduled and unscheduled items.
@@ -529,16 +529,16 @@
 
 ### 5.6 Build asset library and editor integration
 
-- [ ] Build `/app/assets` with workspace-scoped asset listings.
-- [ ] Add an upload control connected to the ImageKit integration.
-- [ ] Display upload progress and success/error feedback.
-- [ ] Display asset filename, type, size, and preview where supported.
-- [ ] Add an action to associate an asset with an authorized content item.
-- [ ] Display assets associated with the current content item in its editor.
-- [ ] Add an action to remove an asset association without deleting the underlying asset.
-- [ ] Add an explicit, confirmed asset deletion action only if deletion checks are implemented.
-- [ ] Add empty, loading, error, and retry states.
-- [ ] Ensure asset delivery URLs are not treated as proof of workspace authorization.
+- [x] Build `/app/assets` with workspace-scoped asset listings.
+- [x] Add an upload control connected to the ImageKit integration.
+- [x] Display upload progress and success/error feedback.
+- [x] Display asset filename, type, size, and preview where supported.
+- [x] Add an action to associate an asset with an authorized content item.
+- [x] Display assets associated with the current content item in its editor.
+- [x] Add an action to remove an asset association without deleting the underlying asset.
+- [x] Add an explicit, confirmed asset deletion action only if deletion checks are implemented.
+- [x] Add empty, loading, error, and retry states.
+- [x] Ensure asset delivery URLs are not treated as proof of workspace authorization.
 
 **Verification Gate 5F**
 - [ ] Upload a valid file and confirm metadata is stored and visible to the correct workspace.
@@ -550,15 +550,15 @@
 
 ### 5.7 Connect AI assistance to content editing
 
-- [ ] Add an AI assistance panel or action menu in the content editor.
-- [ ] Add controls for generating ideas, briefs, titles/hooks, captions/outlines, and refining existing text.
-- [ ] Send AI requests only to the authenticated server endpoint.
-- [ ] Display the AI-generated-content notice near returned suggestions.
-- [ ] Let users insert, edit, or discard generated suggestions before saving.
-- [ ] Display loading, rate-limit, quota, and recoverable error states.
-- [ ] Preserve current editor content when AI generation fails.
-- [ ] Display a clear usage-limit message and upgrade link when the current plan limit is reached.
-- [ ] Never trigger automatic publication from an AI action.
+- [x] Add an AI assistance panel or action menu in the content editor.
+- [x] Add controls for generating ideas, briefs, titles/hooks, captions/outlines, and refining existing text.
+- [x] Send AI requests only to the authenticated server endpoint.
+- [x] Display the AI-generated-content notice near returned suggestions.
+- [x] Let users insert, edit, or discard generated suggestions before saving.
+- [x] Display loading, rate-limit, quota, and recoverable error states.
+- [x] Preserve current editor content when AI generation fails.
+- [x] Display a clear usage-limit message and upgrade link when the current plan limit is reached.
+- [x] Never trigger automatic publication from an AI action.
 
 **Verification Gate 5G**
 - [ ] Test each AI action through the editor using provider mocks or a controlled integration environment.
@@ -570,17 +570,17 @@
 
 ### 5.8 Account settings and privacy controls
 
-- [ ] Build `/app/settings`.
-- [ ] Display the current account profile and workspace name.
-- [ ] Allow supported profile preferences such as display name, timezone, and locale to be updated through server-side validation.
-- [ ] Display the current plan and subscription state.
-- [ ] Link to pricing and subscription management.
-- [ ] Add a privacy-notice link and display the accepted notice version where appropriate.
-- [ ] Add controls for optional marketing consent and withdrawal where applicable.
-- [ ] Add an account-data export action.
-- [ ] Add an account deletion request action with explanation and explicit confirmation.
-- [ ] Display export and deletion status without claiming unverified completion.
-- [ ] Add loading, success, empty, and error states for settings operations.
+- [x] Build `/app/settings`.
+- [x] Display the current account profile and workspace name.
+- [x] Allow supported profile preferences such as display name, timezone, and locale to be updated through server-side validation.
+- [x] Display the current plan and subscription state.
+- [x] Link to pricing and subscription management.
+- [x] Add a privacy-notice link and display the accepted notice version where appropriate.
+- [x] Add controls for optional marketing consent and withdrawal where applicable.
+- [x] Add an account-data export action.
+- [x] Add an account deletion request action with explanation and explicit confirmation.
+- [x] Display export and deletion status without claiming unverified completion.
+- [x] Add loading, success, empty, and error states for settings operations.
 
 **Verification Gate 5H**
 - [ ] Test profile updates and timezone persistence.
@@ -605,6 +605,8 @@
 - [ ] Fix horizontal overflow in primary workflows.
 - [ ] Add consistent error boundaries and safe user-facing error messages.
 - [ ] Confirm no sensitive content, credentials, or stack traces appear in client-visible errors or logs.
+
+> **Status note:** Module 5.2–5.8 implementation is complete: authenticated workspace shell, dashboard, scoped content CRUD, editor, calendar, asset library, AI assistance, settings, export/deletion controls, loading/error boundaries, and responsive navigation are implemented. Remaining checklist items in Modules 5.1 and 5.9 are verification tasks requiring manual viewport/keyboard/screen-reader review or live provider/database credentials; the automated local checks and production build are run after this implementation.
 
 **Verification Gate 5I**
 - [ ] Run automated accessibility scans on landing, pricing, dashboard, content editor, calendar, assets, and settings.

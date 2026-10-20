@@ -1,44 +1,18 @@
-import { requireApplicationUser } from "@/lib/auth";
+import Link from "next/link";
+import { eq } from "drizzle-orm";
 
+import { getDb } from "@/db";
+import { subscriptions } from "@/db/schema";
+import { Badge } from "@/components/ui";
+import { requireApplicationUser } from "@/lib/auth";
+import { initializeCurrentUserWorkspace } from "@/lib/initialize-user";
+import { resolveEntitlements } from "@/lib/plans";
 import { updateAccountSettings } from "./actions";
+import { DeleteAccountControl } from "./DeleteAccountControl";
 
 export const dynamic = "force-dynamic";
 
 export default async function AccountSettingsPage() {
-  const user = await requireApplicationUser();
-
-  return (
-    <main>
-      <p><a href="/app">← Back to workspace</a></p>
-      <h1>Account settings</h1>
-      <form action={updateAccountSettings}>
-        <label>
-          Display name
-          <input name="displayName" defaultValue={user.displayName ?? ""} maxLength={120} />
-        </label>
-        <label>
-          Timezone
-          <input name="timezone" defaultValue={user.timezone} maxLength={64} required />
-        </label>
-        <label>
-          Locale
-          <input name="locale" defaultValue={user.locale} maxLength={16} required />
-        </label>
-        <label>
-          <input name="privacyNoticeAccepted" type="checkbox" defaultChecked={Boolean(user.privacyNoticeAcceptedAt)} />
-          I accept the current privacy notice.
-        </label>
-        <label>
-          <input name="marketingConsent" type="checkbox" defaultChecked={user.marketingConsent} />
-          I would like to receive product updates.
-        </label>
-        <button type="submit">Save settings</button>
-      </form>
-      <section>
-        <h2>Privacy controls</h2>
-        <p><a href="/api/account/export">Download my account data</a></p>
-        <p>To delete your account, send the explicit confirmation <strong>DELETE MY ACCOUNT</strong> to the account deletion endpoint after reviewing the privacy notice.</p>
-      </section>
-    </main>
-  );
+  const user = await requireApplicationUser(); const { workspace } = await initializeCurrentUserWorkspace(); const [subscription] = await getDb().select({ planKey: subscriptions.planKey, status: subscriptions.status, currentPeriodEnd: subscriptions.currentPeriodEnd }).from(subscriptions).where(eq(subscriptions.workspaceId, workspace.id)).orderBy(subscriptions.updatedAt).limit(1); const plan = resolveEntitlements(subscription);
+  return <div className="workspace-container"><p><Link href="/app">← Back to workspace</Link></p><header className="workspace-topbar"><div><p className="workspace-kicker">Account · {workspace.name}</p><h1>Settings</h1><p>Manage your profile, preferences, privacy choices, and workspace plan.</p></div></header><div className="dashboard-grid"><section className="editor-card"><h2>Profile and preferences</h2><form className="editor-form" action={updateAccountSettings}><label className="ui-label">Email<input className="ui-input" value={user.email} readOnly /></label><label className="ui-label">Display name<input className="ui-input" name="displayName" defaultValue={user.displayName ?? ""} maxLength={120} /></label><label className="ui-label">Timezone<input className="ui-input" name="timezone" defaultValue={user.timezone} maxLength={64} required /></label><label className="ui-label">Locale<input className="ui-input" name="locale" defaultValue={user.locale} maxLength={16} required /></label><label className="ui-label" style={{ display: "flex", flexDirection: "row", gap: ".6rem" }}><input name="privacyNoticeAccepted" type="checkbox" defaultChecked={Boolean(user.privacyNoticeAcceptedAt)} /> I accept the current <Link href="/privacy">privacy notice</Link>.</label><label className="ui-label" style={{ display: "flex", flexDirection: "row", gap: ".6rem" }}><input name="marketingConsent" type="checkbox" defaultChecked={user.marketingConsent} /> I would like to receive product updates.</label><button className="ui-button ui-button-primary" type="submit">Save settings</button></form></section><aside className="editor-side"><section className="editor-card"><h2>Workspace plan</h2><p><Badge tone={subscription?.status === "active" ? "success" : "neutral"}>{plan.displayName}</Badge></p><p>{subscription?.status ?? "inactive"}{subscription?.currentPeriodEnd ? ` · renews ${subscription.currentPeriodEnd.toLocaleDateString()}` : ""}</p><Link className="ui-button ui-button-secondary" href="/pricing">Compare plans</Link></section><section className="editor-card"><h2>Privacy controls</h2><p>Accepted notice: {user.privacyNoticeVersion ?? "Not accepted"}{user.privacyNoticeAcceptedAt ? ` on ${user.privacyNoticeAcceptedAt.toLocaleDateString()}` : ""}</p><a className="ui-button ui-button-secondary" href="/api/account/export">Download account data</a></section><section className="editor-card"><h2>Delete account</h2><p>This permanently removes application data where ownership rules allow it. The request does not silently transfer shared workspaces.</p><DeleteAccountControl /></section></aside></div></div>;
 }
