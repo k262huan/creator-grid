@@ -396,31 +396,34 @@
 
 ### 5.1 Establish the design system and public pages
 
-- [ ] Configure Tailwind CSS and shared design tokens for typography, spacing, colors, borders, and focus states.
-- [ ] Create reusable accessible UI primitives for buttons, inputs, labels, selects, dialogs, status badges, alerts, loading states, and empty states.
-- [ ] Ensure every form field has an associated label and accessible error message.
-- [ ] Implement visible keyboard focus indicators.
-- [ ] Add reduced-motion support for any motion effects.
-- [ ] Build the public landing page at `/` with a clear CreatorGrid value proposition.
-- [ ] Add the primary “Start for Free” CTA linking to sign-up.
-- [ ] Add the secondary “Explore Features” CTA linking to `/features`.
-- [ ] Add a representative product preview without presenting mock data as live user data.
-- [ ] Add product benefit and workflow sections without unsupported performance claims.
-- [ ] Build `/features` with MVP feature explanations.
-- [ ] Build `/pricing` with Free, Creator Pro, and Team plan cards.
-- [ ] Ensure the Free plan does not require payment details.
-- [ ] Render plan pricing and billing intervals from centralized validated configuration.
-- [ ] Show plan features, limits, collaboration availability, client-review availability, and appropriate CTA states.
-- [ ] Build `/privacy` with the reviewed privacy notice and applicable PICS information.
-- [ ] Add footer links for privacy, terms, and contact, ensuring each destination exists or is clearly marked as pending content rather than a broken link.
-- [ ] Ensure public pages have loading/error behavior where applicable and responsive layouts.
+- [x] Configure Tailwind CSS and shared design tokens for typography, spacing, colors, borders, and focus states.
+- [x] Create reusable accessible UI primitives for buttons, inputs, labels, selects, dialogs, status badges, alerts, loading states, and empty states.
+- [x] Ensure every form field has an associated label and accessible error message.
+- [x] Implement visible keyboard focus indicators.
+- [x] Add reduced-motion support for any motion effects.
+- [x] Build the public landing page at `/` with a clear CreatorGrid value proposition.
+- [x] Add the primary “Start for Free” CTA linking to sign-up.
+- [x] Add the secondary “Explore Features” CTA linking to `/features`.
+- [x] Add a representative product preview without presenting mock data as live user data.
+- [x] Add product benefit and workflow sections without unsupported performance claims.
+- [x] Build `/features` with MVP feature explanations.
+- [x] Build `/pricing` with Free, Creator Pro, and Team plan cards.
+- [x] Ensure the Free plan does not require payment details.
+- [x] Render plan pricing and billing intervals from centralized validated configuration.
+- [x] Show plan features, limits, collaboration availability, client-review availability, and appropriate CTA states.
+- [x] Build `/privacy` with the reviewed privacy notice and applicable PICS information.
+- [x] Add footer links for privacy, terms, and contact, ensuring each destination exists or is clearly marked as pending content rather than a broken link.
+- [x] Ensure public pages have loading/error behavior where applicable and responsive layouts.
 
 **Verification Gate 5A**
-- [ ] Visit `/`, `/features`, `/pricing`, and `/privacy` and confirm they render without runtime errors.
-- [ ] Confirm pricing labels match the server-side plan configuration.
-- [ ] Test public navigation and CTA destinations.
+- [x] Visit `/`, `/features`, `/pricing`, `/privacy`, `/terms`, and `/contact` and confirm they render without runtime errors.
+- [x] Confirm pricing labels match the centralized server-side plan configuration.
+- [x] Test public navigation and CTA destinations.
 - [ ] Run responsive checks at mobile, tablet, and desktop widths.
-- [ ] Run automated accessibility checks and `npm run build`.
+- [ ] Run automated accessibility checks.
+- [x] Run `npm run build`.
+
+> **Status note:** Module 5.1’s Tailwind-backed design tokens, accessible primitives, responsive marketing shell, landing/features/pricing/privacy/terms/contact pages, centralized pricing display, focus states, and reduced-motion support are implemented. Manual responsive viewport checks and an automated accessibility scan remain pending.
 
 ### 5.2 Build authenticated workspace shell and dashboard
 

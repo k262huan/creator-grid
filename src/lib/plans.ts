@@ -32,6 +32,18 @@ export type VerifiedSubscription = {
   currentPeriodEnd?: Date | null;
 };
 
+function publicPlanConfig(): Record<PlanKey, PlanEntitlements> {
+  return {
+    free: { key: "free", displayName: "Free", monthlyPrice: "0", billingInterval: "month", contentLimit: 50, aiDailyLimit: 5, maxUploadSizeBytes: 10 * 1024 * 1024, capabilities: { collaboration: false, clientReview: false, advancedAnalytics: false } },
+    creator_pro: { key: "creator_pro", displayName: "Creator Pro", monthlyPrice: process.env.CREATOR_PRO_MONTHLY_PRICE ?? "19", billingInterval: "month", contentLimit: 500, aiDailyLimit: 50, maxUploadSizeBytes: 10 * 1024 * 1024, capabilities: { collaboration: false, clientReview: false, advancedAnalytics: true } },
+    team: { key: "team", displayName: "Team", monthlyPrice: process.env.TEAM_MONTHLY_PRICE ?? "49", billingInterval: "month", contentLimit: null, aiDailyLimit: 200, maxUploadSizeBytes: 10 * 1024 * 1024, capabilities: { collaboration: true, clientReview: true, advancedAnalytics: true } },
+  };
+}
+
+export function getPublicPlanConfig(): Record<PlanKey, PlanEntitlements> {
+  return publicPlanConfig();
+}
+
 function positiveLimit(value: string | undefined, fallback: number): number {
   const parsed = Number(value ?? fallback);
   return Number.isInteger(parsed) && parsed > 0 ? parsed : fallback;
@@ -39,37 +51,11 @@ function positiveLimit(value: string | undefined, fallback: number): number {
 
 export function getPlanConfig(): Record<PlanKey, PlanEntitlements> {
   const env = getServerEnv();
+  const plans = publicPlanConfig();
   return {
-    free: {
-      key: "free",
-      displayName: "Free",
-      monthlyPrice: "0",
-      billingInterval: "month",
-      contentLimit: positiveLimit(process.env.CONTENT_LIMIT_FREE, 50),
-      aiDailyLimit: env.AI_DAILY_LIMIT_FREE,
-      maxUploadSizeBytes: env.MAX_UPLOAD_SIZE_BYTES,
-      capabilities: { collaboration: false, clientReview: false, advancedAnalytics: false },
-    },
-    creator_pro: {
-      key: "creator_pro",
-      displayName: "Creator Pro",
-      monthlyPrice: process.env.CREATOR_PRO_MONTHLY_PRICE ?? "19",
-      billingInterval: "month",
-      contentLimit: positiveLimit(process.env.CONTENT_LIMIT_CREATOR_PRO, 500),
-      aiDailyLimit: env.AI_DAILY_LIMIT_CREATOR_PRO,
-      maxUploadSizeBytes: env.MAX_UPLOAD_SIZE_BYTES,
-      capabilities: { collaboration: false, clientReview: false, advancedAnalytics: true },
-    },
-    team: {
-      key: "team",
-      displayName: "Team",
-      monthlyPrice: process.env.TEAM_MONTHLY_PRICE ?? "49",
-      billingInterval: "month",
-      contentLimit: null,
-      aiDailyLimit: env.AI_DAILY_LIMIT_TEAM,
-      maxUploadSizeBytes: env.MAX_UPLOAD_SIZE_BYTES,
-      capabilities: { collaboration: true, clientReview: true, advancedAnalytics: true },
-    },
+    free: { ...plans.free, contentLimit: positiveLimit(process.env.CONTENT_LIMIT_FREE, 50), aiDailyLimit: env.AI_DAILY_LIMIT_FREE, maxUploadSizeBytes: env.MAX_UPLOAD_SIZE_BYTES },
+    creator_pro: { ...plans.creator_pro, contentLimit: positiveLimit(process.env.CONTENT_LIMIT_CREATOR_PRO, 500), aiDailyLimit: env.AI_DAILY_LIMIT_CREATOR_PRO, maxUploadSizeBytes: env.MAX_UPLOAD_SIZE_BYTES },
+    team: { ...plans.team, aiDailyLimit: env.AI_DAILY_LIMIT_TEAM, maxUploadSizeBytes: env.MAX_UPLOAD_SIZE_BYTES },
   };
 }
 
