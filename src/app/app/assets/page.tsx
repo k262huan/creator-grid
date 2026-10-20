@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element -- ImageKit URLs are provider-configured at runtime. */
 import { and, desc, eq } from "drizzle-orm";
 import Link from "next/link";
 
