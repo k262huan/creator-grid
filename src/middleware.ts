@@ -3,7 +3,7 @@ import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
 const isProtectedRoute = createRouteMatcher(["/app(.*)", "/api(.*)"]);
-const isPublicApiRoute = createRouteMatcher(["/api/webhooks/stripe(.*)"]);
+const isPublicApiRoute = createRouteMatcher(["/api/webhooks/stripe(.*)", "/api/stripe/webhook(.*)"]);
 const hasClerkRuntimeConfiguration = Boolean(
   process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY && process.env.CLERK_SECRET_KEY,
 );

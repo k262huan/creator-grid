@@ -9,6 +9,7 @@
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
+    "test:e2e": "playwright test",
     "db:generate": "drizzle-kit generate",
     "db:migrate": "drizzle-kit migrate",
     "db:check": "drizzle-kit check",
@@ -23,9 +24,12 @@
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
     "server-only": "^0.0.1",
+    "stripe": "^23.0.0",
     "zod": "^3.25.76"
   },
   "devDependencies": {
+    "@axe-core/playwright": "^4.14.0",
+    "@playwright/test": "^1.64.1",
     "@tailwindcss/postcss": "^4.3.3",
     "@types/node": "^22.15.0",
     "@types/react": "^19.1.0",
@@ -33,9 +37,13 @@
     "drizzle-kit": "^0.31.11",
     "eslint": "^8.57.1",
     "eslint-config-next": "^15.5.6",
+    "playwright": "^1.64.1",
     "postcss": "^8.5.31",
     "tailwindcss": "^4.3.3",
     "typescript": "^5.8.3",
     "vitest": "^3.1.1"
+  },
+  "overrides": {
+    "postcss": "$postcss"
   }
 }

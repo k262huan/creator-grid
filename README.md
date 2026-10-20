@@ -60,7 +60,7 @@ Before enabling a deployment that uses database-backed routes:
 1. Apply the numbered Drizzle migrations to the target Neon database with the migration role: `npm run db:migrate`.
 2. Set `DATABASE_URL` at runtime to a TLS-required URL for a least-privilege role that does not have `SUPERUSER` or `BYPASSRLS`.
 3. Configure Clerk's allowed origins and redirect URLs for the Vercel deployment domain, including `/sign-in`, `/sign-up`, and `/app`.
-4. Configure the Stripe test webhook endpoint at `/api/stripe/webhook` only after the webhook route is implemented and signature verification is enabled.
+4. Configure the Stripe test webhook endpoint at `/api/stripe/webhook` only after the webhook route is implemented and signature verification is enabled. Do not expose `/api/stripe/checkout` or `/api/stripe/portal` without Clerk configuration.
 
 The Vercel build is credential-independent, but authenticated and database-backed acceptance tests require Preview environment variables and isolated test resources.
 
@@ -70,9 +70,23 @@ The Vercel build is credential-independent, but authenticated and database-backe
 - Create a Clerk application, configure email authentication and callback URLs for each environment, and set the publishable, secret, and webhook signing values.
 - Create Stripe **test-mode** products and prices for Creator Pro and Team. Configure a local webhook endpoint with the test signing secret. Never use live-mode keys for MVP development.
 - With the Stripe CLI authenticated to the test account, forward events locally with `stripe listen --forward-to localhost:3000/api/stripe/webhook`; keep the signing secret in `.env.local` only.
+- The server accepts only `creator_pro` and `team` plan keys, resolves Price IDs from server environment variables, and rejects client-supplied Price IDs or the Free plan for Checkout.
+- Stripe Checkout success/cancel URLs are navigation-only. Paid access is written only after a verified signed webhook. `past_due`, `unpaid`, canceled, incomplete, and unknown subscription states resolve to Free; scheduled cancellation remains usable until Stripe reports the subscription as canceled.
+- `/api/stripe/portal` creates a Billing Portal session only for an authenticated workspace owner with a database-confirmed Stripe customer.
 - Create an ImageKit account and configure the public key, private key, and URL endpoint. Private signing credentials must remain server-side.
 - Create a Gemini API key with the minimum required access and keep it server-side.
 
 ## Stripe safety rule
 
 A Checkout success redirect is navigation only. Paid entitlements must be granted only from verified signed webhook events. Live Stripe credentials are rejected by the server environment schema.
+
+## Verification commands
+
+```bash
+npm run typecheck
+npm run lint
+npm test
+npm run build
+```
+
+For live test-mode billing acceptance, use an isolated Preview database and Stripe test account with `stripe listen --forward-to localhost:3000/api/stripe/webhook`; never use production data or live-mode payment credentials.

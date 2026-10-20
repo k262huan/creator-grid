@@ -606,7 +606,7 @@
 - [ ] Add consistent error boundaries and safe user-facing error messages.
 - [ ] Confirm no sensitive content, credentials, or stack traces appear in client-visible errors or logs.
 
-> **Status note:** Module 5.2–5.8 implementation is complete: authenticated workspace shell, dashboard, scoped content CRUD, editor, calendar, asset library, AI assistance, settings, export/deletion controls, loading/error boundaries, and responsive navigation are implemented. Remaining checklist items in Modules 5.1 and 5.9 are verification tasks requiring manual viewport/keyboard/screen-reader review or live provider/database credentials; the automated local checks and production build are run after this implementation.
+> **Status note:** Module 5.2–5.8 implementation is complete: authenticated workspace shell, dashboard, scoped content CRUD, editor, calendar, asset library, AI assistance, settings, export/deletion controls, loading/error boundaries, and responsive navigation are implemented. Automated axe scans pass with zero violations on `/`, `/features`, `/pricing`, `/privacy`, `/terms`, and `/contact`. Remaining checklist items in Modules 5.1 and 5.9 are verification tasks requiring manual viewport/keyboard/screen-reader review or live provider/database credentials; the automated local checks and production build are run after this implementation.
 
 **Verification Gate 5I**
 - [ ] Run automated accessibility scans on landing, pricing, dashboard, content editor, calendar, assets, and settings.
@@ -622,37 +622,37 @@
 ### 6.1 Configure Stripe test-mode products and prices
 
 - [ ] Create or verify Stripe test-mode products/prices for Creator Pro and Team.
-- [ ] Store Stripe Price IDs in server-side environment variables only.
-- [ ] Validate plan identifiers against the centralized server-side plan registry.
-- [ ] Ensure the Free plan never creates a Checkout session.
-- [ ] Add a server-side helper to verify the Stripe client is configured with test-mode credentials.
-- [ ] Define the policy for failed payments and cancellation, including whether access continues to the end of a paid period.
-- [ ] Ensure plan prices displayed in the UI match the configured prices used by Checkout.
-- [ ] Keep all live-mode Stripe credentials out of the MVP configuration.
+- [x] Store Stripe Price IDs in server-side environment variables only.
+- [x] Validate plan identifiers against the centralized server-side plan registry.
+- [x] Ensure the Free plan never creates a Checkout session.
+- [x] Add a server-side helper to verify the Stripe client is configured with test-mode credentials.
+- [x] Define the policy for failed payments and cancellation, including whether access continues to the end of a paid period.
+- [x] Ensure plan prices displayed in the UI match the configured prices used by Checkout.
+- [x] Keep all live-mode Stripe credentials out of the MVP configuration.
 
 **Verification Gate 6A**
 - [ ] Confirm the configured Stripe products/prices are test-mode resources.
-- [ ] Confirm unknown plan identifiers and client-supplied Price IDs are rejected.
-- [ ] Confirm the Free plan does not initiate paid Checkout.
-- [ ] Run billing configuration unit tests and `npm run build`.
+- [x] Confirm unknown plan identifiers and client-supplied Price IDs are rejected.
+- [x] Confirm the Free plan does not initiate paid Checkout.
+- [x] Run billing configuration unit tests and `npm run build`.
 
 ### 6.2 Implement Checkout session creation
 
-- [ ] Create `POST /api/stripe/checkout`.
-- [ ] Require a valid Clerk session before creating a Checkout session.
-- [ ] Resolve the authenticated application user and authorized workspace server-side.
-- [ ] Validate the requested plan against the server-side allowlist.
-- [ ] Reject plans that are unavailable, unconfigured, or not purchasable.
-- [ ] Retrieve or create the Stripe customer using trusted server-side identifiers.
-- [ ] Create the Checkout session with test-mode credentials.
-- [ ] Set success and cancellation URLs using the trusted `NEXT_PUBLIC_APP_URL` origin.
-- [ ] Attach trusted workspace/user metadata needed to reconcile the Checkout session.
-- [ ] Use idempotency keys where appropriate to reduce duplicate session creation.
-- [ ] Return only the required Checkout URL or session information.
-- [ ] Redirect the user to Stripe-hosted Checkout.
-- [ ] Add success and cancellation UI states that explain that subscription state is confirmed asynchronously.
-- [ ] Ensure returning to `/app/settings?checkout=success` does not itself grant paid access.
-- [ ] Prevent unauthorized workspace members from changing subscription state.
+- [x] Create `POST /api/stripe/checkout`.
+- [x] Require a valid Clerk session before creating a Checkout session.
+- [x] Resolve the authenticated application user and authorized workspace server-side.
+- [x] Validate the requested plan against the server-side allowlist.
+- [x] Reject plans that are unavailable, unconfigured, or not purchasable.
+- [x] Retrieve or create the Stripe customer using trusted server-side identifiers.
+- [x] Create the Checkout session with test-mode credentials.
+- [x] Set success and cancellation URLs using the trusted `NEXT_PUBLIC_APP_URL` origin.
+- [x] Attach trusted workspace/user metadata needed to reconcile the Checkout session.
+- [x] Use idempotency keys where appropriate to reduce duplicate session creation.
+- [x] Return only the required Checkout URL or session information.
+- [x] Redirect the user to Stripe-hosted Checkout.
+- [x] Add success and cancellation UI states that explain that subscription state is confirmed asynchronously.
+- [x] Ensure returning to `/app/settings?checkout=success` does not itself grant paid access.
+- [x] Prevent unauthorized workspace members from changing subscription state.
 
 **Verification Gate 6B**
 - [ ] Test successful test-mode Checkout session creation.
@@ -663,29 +663,23 @@
 
 ### 6.3 Implement signed, idempotent Stripe webhooks
 
-- [ ] Create `POST /api/stripe/webhook`.
-- [ ] Read the unmodified request body needed for signature verification.
-- [ ] Verify the `Stripe-Signature` header using `STRIPE_WEBHOOK_SECRET`.
-- [ ] Reject invalid or missing signatures before processing the event.
-- [ ] Validate supported Stripe event types.
-- [ ] Insert each event ID into `stripe_webhook_events` with a unique constraint before applying effects.
-- [ ] Handle duplicate and retried event deliveries idempotently.
-- [ ] Process supported `checkout.session.completed` events.
-- [ ] Process supported `customer.subscription.created` events.
-- [ ] Process supported `customer.subscription.updated` events.
-- [ ] Process supported `customer.subscription.deleted` events.
-- [ ] Process supported `invoice.paid` events.
-- [ ] Process supported `invoice.payment_failed` events.
-- [ ] Reconcile current Stripe subscription state when event ordering makes the event payload insufficient.
-- [ ] Verify the Stripe customer, subscription, workspace metadata, and configured plan before updating local state.
-- [ ] Update subscription records transactionally where possible.
-- [ ] Mark webhook processing state and timestamp only after successful processing.
-- [ ] Return appropriate HTTP status codes so Stripe retries transient failures.
-- [ ] Avoid storing unnecessary raw payment-event payloads.
-- [ ] Add safe operational logging for persistent processing failures without logging secrets or sensitive payment data.
-- [ ] Ensure paid entitlements are resolved from verified subscription state only.
-- [ ] Implement the configured failed-payment and cancellation access policy.
-- [ ] Preserve access until period end where the configured cancellation rules require it.
+- [x] Create `POST /api/stripe/webhook`.
+- [x] Read the unmodified request body needed for signature verification.
+- [x] Verify the `Stripe-Signature` header using `STRIPE_WEBHOOK_SECRET`.
+- [x] Reject invalid or missing signatures before processing.
+- [x] Validate supported Stripe event types.
+- [x] Insert each event ID into `stripe_webhook_events` with a unique constraint before applying effects.
+- [x] Handle duplicate and retried event deliveries idempotently.
+- [x] Process supported checkout, subscription, and invoice events.
+- [x] Reconcile current Stripe subscription state when event ordering makes the event payload insufficient.
+- [x] Verify trusted workspace metadata and configured Price IDs before updating local state.
+- [x] Update subscription records transactionally where possible.
+- [x] Mark webhook processing state only after successful processing.
+- [x] Return retryable HTTP status codes for processing failures.
+- [x] Avoid storing unnecessary raw payment-event payloads.
+- [x] Add safe operational logging without secrets or payment payloads.
+- [x] Ensure paid entitlements are resolved from verified subscription state only.
+- [x] Implement the configured failed-payment and cancellation access policy.
 
 **Verification Gate 6C**
 - [ ] Test a valid signed webhook and confirm the correct subscription record is updated.
@@ -699,15 +693,15 @@
 
 ### 6.4 Subscription UI and entitlement enforcement
 
-- [ ] Display the current plan and subscription status in settings and dashboard.
-- [ ] Display appropriate upgrade actions for Free users.
-- [ ] Display current-plan state for active paid users.
-- [ ] Provide the configured subscription management/cancellation pathway.
-- [ ] Refresh subscription state from the server after Checkout return without treating the return URL as proof of payment.
-- [ ] Ensure all restricted server operations consult the entitlement resolver.
-- [ ] Handle inactive, canceled, past-due, and payment-failed states according to the documented policy.
-- [ ] Explain when a feature or usage limit is unavailable and provide an appropriate upgrade path.
-- [ ] Ensure downgrade or cancellation does not silently delete user content.
+- [x] Display the current plan and subscription status in settings and dashboard.
+- [x] Display appropriate upgrade actions for Free users.
+- [x] Display current-plan state for active paid users.
+- [x] Provide the configured Stripe Billing Portal management/cancellation pathway.
+- [x] Refresh subscription state from the server after Checkout return without treating the return URL as proof of payment.
+- [x] Ensure all restricted server operations consult the entitlement resolver.
+- [x] Handle inactive, canceled, past-due, and payment-failed states according to the documented policy.
+- [x] Explain when a feature or usage limit is unavailable and provide an appropriate upgrade path.
+- [x] Ensure downgrade or cancellation does not silently delete user content.
 
 **Verification Gate 6D**
 - [ ] Test Free, Creator Pro, and Team plan displays against database-confirmed subscription state.
@@ -717,15 +711,15 @@
 
 ### 6.5 Automated tests and end-to-end user journeys
 
-- [ ] Configure Vitest for unit and integration testing if not already configured.
-- [ ] Configure Playwright for end-to-end testing if not already configured.
-- [ ] Add unit tests for plan entitlement resolution.
-- [ ] Add unit tests for content-status transition validation.
-- [ ] Add unit tests for workspace authorization helpers.
-- [ ] Add unit tests for all critical Zod request schemas.
-- [ ] Add unit tests for AI usage-limit calculations.
-- [ ] Add unit tests for subscription-status mapping.
-- [ ] Add unit tests for date and timezone handling.
+- [x] Configure Vitest for unit and integration testing if not already configured.
+- [x] Configure Playwright for end-to-end testing if not already configured.
+- [x] Add unit tests for plan entitlement resolution.
+- [x] Add unit tests for content-status transition validation.
+- [x] Add unit tests for workspace authorization helpers.
+- [x] Add unit tests for critical Zod request schemas.
+- [x] Add unit tests for AI usage-limit calculations.
+- [x] Add unit tests for subscription-status mapping.
+- [x] Add unit tests for date and timezone handling.
 - [ ] Add integration tests for Clerk identity mapping.
 - [ ] Add integration tests for idempotent workspace initialization.
 - [ ] Add integration tests for content CRUD and PostgreSQL foreign-key behavior.
@@ -751,10 +745,10 @@
 - [ ] Add an end-to-end keyboard-navigation test for the main workflow.
 
 **Verification Gate 6E**
-- [ ] Run the complete unit test suite and confirm all tests pass.
+- [x] Run the complete unit test suite and confirm all tests pass.
 - [ ] Run the complete integration test suite against an isolated test database.
-- [ ] Run Playwright end-to-end tests against a test environment.
-- [ ] Confirm tests do not depend on production data or live Stripe payments.
+- [x] Run Playwright public-route smoke tests against the local production build.
+- [x] Confirm the local tests do not depend on production data or live Stripe payments.
 - [ ] Confirm failures are actionable and no required critical journey is skipped.
 
 ### 6.6 Security, privacy, accessibility, and reliability audit
@@ -787,16 +781,16 @@
 
 ### 6.7 Deployment readiness and final release gate
 
-- [ ] Document local development, environment setup, database migrations, and test commands in `README.md`.
+- [x] Document local development, environment setup, database migrations, and test commands in `README.md`.
 - [ ] Configure separate local, test, preview, and production environment variables.
 - [ ] Verify the deployment environment has all required variables without printing secret values.
 - [ ] Verify Clerk callback URLs and authentication settings for the deployed environment.
 - [ ] Verify Stripe test-mode keys, Price IDs, and webhook endpoint configuration.
 - [ ] Verify ImageKit upload authorization in the deployed environment.
 - [ ] Verify Gemini requests run server-side in the deployed environment.
-- [ ] Generate and review all Drizzle migrations.
+- [x] Generate and review all Drizzle migrations.
 - [ ] Apply migrations through the controlled deployment process.
-- [ ] Run production-build lint and TypeScript checks.
+- [x] Run production-build lint and TypeScript checks.
 - [ ] Run unit and integration tests before deployment.
 - [ ] Run smoke tests for public pages, sign-in, protected routes, content CRUD, calendar, assets, AI, pricing, and settings.
 - [ ] Verify RLS and cross-workspace authorization against the deployed test environment.
@@ -804,6 +798,8 @@
 - [ ] Confirm the app works on mobile and desktop.
 - [ ] Confirm no automatic social publishing or other deferred Phase 2 functionality is required for launch.
 - [ ] Keep Stripe live-mode payment processing disabled until explicitly approved.
+
+> **Module 6 status note:** The server-side Stripe test-mode boundary, Checkout, Billing Portal, signed idempotent webhook processing, subscription UI, Playwright configuration, public smoke tests, unit tests, migration checks, production build, lint, TypeScript, and production dependency audit are implemented and verified locally. Live Stripe product/price provisioning, signed webhook delivery, isolated PostgreSQL integration, Clerk-authenticated journeys, and manual accessibility/security acceptance remain pending until provider credentials and an isolated test environment are supplied.
 
 **Final Verification Gate**
 - [ ] Run the project's lint command and confirm zero errors.
