@@ -135,7 +135,7 @@ export async function reserveAiUsage(
     provider?: string;
     model?: string;
   },
-): Promise<void> {
+): Promise<string> {
   // Serialize reservations per workspace/day so concurrent requests cannot both
   // observe the same remaining quota and exceed the server-side limit.
   await tx.execute(sql`select pg_advisory_xact_lock(hashtext(${`${input.workspaceId}:${new Date().toISOString().slice(0, 10)}`}))`);
@@ -152,12 +152,13 @@ export async function reserveAiUsage(
     throw new AiLimitExceededError(input.entitlement.aiDailyLimit);
   }
 
-  await tx.insert(aiUsageEvents).values({
+  const [event] = await tx.insert(aiUsageEvents).values({
     workspaceId: input.workspaceId,
     userId: input.userId,
     provider: input.provider ?? "gemini",
     model: input.model ?? "pending",
     featureKey: input.featureKey,
     status: "started",
-  });
+  }).returning({ id: aiUsageEvents.id });
+  return event.id;
 }

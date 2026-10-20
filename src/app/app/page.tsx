@@ -20,6 +20,7 @@ export default async function AppPage() {
       <section>
         <h2>Plan, produce, and publish with clarity.</h2>
         <p>Your workspace is ready. Create your first content item to get started.</p>
+        <p><a href="/app/assets">Manage assets</a> · <a href="/app/settings">Account settings</a></p>
       </section>
     </main>
   );

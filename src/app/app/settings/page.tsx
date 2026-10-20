@@ -34,6 +34,11 @@ export default async function AccountSettingsPage() {
         </label>
         <button type="submit">Save settings</button>
       </form>
+      <section>
+        <h2>Privacy controls</h2>
+        <p><a href="/api/account/export">Download my account data</a></p>
+        <p>To delete your account, send the explicit confirmation <strong>DELETE MY ACCOUNT</strong> to the account deletion endpoint after reviewing the privacy notice.</p>
+      </section>
     </main>
   );
 }

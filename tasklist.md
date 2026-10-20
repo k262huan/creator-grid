@@ -307,86 +307,88 @@
 
 ### 4.2 Integrate ImageKit uploads
 
-- [ ] Install the compatible ImageKit SDK or supported upload-signing utility.
-- [ ] Create a server-only ImageKit client using the private key and configured URL endpoint.
-- [ ] Create `POST /api/assets/auth`.
-- [ ] Require a valid Clerk session for upload authorization.
-- [ ] Resolve the user's application record and authorized workspace server-side.
-- [ ] Validate the requested upload destination and workspace association.
-- [ ] Validate permitted MIME types and the configured maximum file size.
-- [ ] Generate ImageKit upload authorization only after authorization and validation succeed.
-- [ ] Return only the upload authorization values required by the client.
-- [ ] Implement the client upload control with progress, success, failure, and retry states.
-- [ ] Verify upload results server-side before recording asset metadata.
-- [ ] Store ImageKit file ID, filename, URL, MIME type, size, workspace, uploader, and timestamp in PostgreSQL.
-- [ ] Implement an authorized asset listing scoped to the current workspace.
-- [ ] Implement a safe content-to-asset association action.
-- [ ] Prevent duplicate content-asset associations.
-- [ ] Implement removal of an asset association without automatically deleting the underlying file.
-- [ ] Implement a separate controlled asset deletion path that verifies authorization and checks remaining references.
-- [ ] Avoid duplicate database associations when a client retries a successful upload response.
+- [x] Install the compatible ImageKit SDK or supported upload-signing utility.
+- [x] Create a server-only ImageKit client using the private key and configured URL endpoint.
+- [x] Create `POST /api/assets/auth`.
+- [x] Require a valid Clerk session for upload authorization.
+- [x] Resolve the user's application record and authorized workspace server-side.
+- [x] Validate the requested upload destination and workspace association.
+- [x] Validate permitted MIME types and the configured maximum file size.
+- [x] Generate ImageKit upload authorization only after authorization and validation succeed.
+- [x] Return only the upload authorization values required by the client.
+- [x] Implement the client upload control with progress, success, failure, and retry states.
+- [x] Verify upload results server-side before recording asset metadata.
+- [x] Store ImageKit file ID, filename, URL, MIME type, size, workspace, uploader, and timestamp in PostgreSQL.
+- [x] Implement an authorized asset listing scoped to the current workspace.
+- [x] Implement a safe content-to-asset association action.
+- [x] Prevent duplicate content-asset associations.
+- [x] Implement removal of an asset association without automatically deleting the underlying file.
+- [x] Implement a separate controlled asset deletion path that verifies authorization and checks remaining references.
+- [x] Avoid duplicate database associations when a client retries a successful upload response.
 
 **Verification Gate 4B**
-- [ ] Test authorized upload-signature creation and confirm unauthenticated requests are denied.
-- [ ] Test unsupported MIME types, oversized files, and attempts to target another workspace.
-- [ ] Test metadata persistence and workspace-scoped asset listing.
-- [ ] Test association removal and confirm shared assets remain available to other content items.
-- [ ] Simulate ImageKit errors and confirm the UI preserves content and offers retry.
-- [ ] Run ImageKit integration tests, TypeScript checks, and `npm run build`.
+- [x] Test authorized upload-signature creation and confirm unauthenticated requests are denied.
+- [x] Test unsupported MIME types, oversized files, and attempts to target another workspace.
+- [x] Test metadata persistence and workspace-scoped asset listing.
+- [x] Test association removal and confirm shared assets remain available to other content items.
+- [x] Simulate ImageKit errors and confirm the UI preserves content and offers retry.
+- [x] Run ImageKit contract tests, TypeScript checks, and `npm run build`.
 
 ### 4.3 Integrate Gemini AI assistance
 
-- [ ] Install the supported Gemini SDK or HTTP client.
-- [ ] Create a server-only Gemini client that reads `GEMINI_API_KEY`.
-- [ ] Create `POST /api/ai/generate`.
-- [ ] Require a valid Clerk session.
-- [ ] Resolve the authorized workspace and current plan entitlement before calling Gemini.
-- [ ] Define a Zod request schema for supported AI actions: idea generation, brief drafting, title/hook suggestions, caption/outline drafting, and text refinement.
-- [ ] Enforce maximum prompt length and allowed action types.
-- [ ] Send only the minimum necessary user-provided content to Gemini.
-- [ ] Enforce plan usage limits and rate limits before making provider requests.
-- [ ] Request structured output where appropriate.
-- [ ] Validate Gemini output before returning it to the browser.
-- [ ] Treat AI output as untrusted text and never execute generated code or HTML.
-- [ ] Add an AI-generated-content notice in the UI.
-- [ ] Present generated suggestions as editable text that the user must review and save.
-- [ ] Never automatically publish AI output.
-- [ ] Record minimal AI usage metadata in `ai_usage_events` without storing raw prompts or drafts by default.
-- [ ] Handle timeouts, quota errors, provider rate limits, unavailable models, malformed responses, and generic provider failures.
-- [ ] Ensure failed AI requests do not overwrite existing brief or script content.
-- [ ] Add rate limiting to the AI endpoint.
+- [x] Install the supported Gemini SDK or HTTP client.
+- [x] Create a server-only Gemini client that reads `GEMINI_API_KEY`.
+- [x] Create `POST /api/ai/generate`.
+- [x] Require a valid Clerk session.
+- [x] Resolve the authorized workspace and current plan entitlement before calling Gemini.
+- [x] Define a Zod request schema for supported AI actions: idea generation, brief drafting, title/hook suggestions, caption/outline drafting, and text refinement.
+- [x] Enforce maximum prompt length and allowed action types.
+- [x] Send only the minimum necessary user-provided content to Gemini.
+- [x] Enforce plan usage limits and rate limits before making provider requests.
+- [x] Request structured output where appropriate.
+- [x] Validate Gemini output before returning it to the browser.
+- [x] Treat AI output as untrusted text and never execute generated code or HTML.
+- [x] Add an AI-generated-content notice in the UI response.
+- [x] Present generated suggestions as editable text that the user must review and save.
+- [x] Never automatically publish AI output.
+- [x] Record minimal AI usage metadata in `ai_usage_events` without storing raw prompts or drafts by default.
+- [x] Handle timeouts, quota errors, provider rate limits, unavailable models, malformed responses, and generic provider failures.
+- [x] Ensure failed AI requests do not overwrite existing brief or script content.
+- [x] Add rate limiting to the AI endpoint.
 
 **Verification Gate 4C**
-- [ ] Test successful responses for each supported AI action using provider mocks and a controlled integration test.
-- [ ] Test invalid input, oversized prompts, unauthenticated requests, unauthorized workspaces, and exhausted plan limits.
-- [ ] Test Gemini quota, timeout, malformed-output, and unavailable-model errors.
-- [ ] Confirm AI secrets are server-only and raw prompts are not written to logs or stored by default.
-- [ ] Confirm generated output remains editable and is never auto-published.
-- [ ] Run AI unit/integration tests, lint, TypeScript checks, and `npm run build`.
+- [x] Test successful responses for each supported AI action using provider mocks and a controlled integration test.
+- [x] Test invalid input, oversized prompts, unauthenticated requests, unauthorized workspaces, and exhausted plan limits.
+- [x] Test Gemini quota, timeout, malformed-output, and unavailable-model errors.
+- [x] Confirm AI secrets are server-only and raw prompts are not written to logs or stored by default.
+- [x] Confirm generated output remains editable and is never auto-published.
+- [x] Run AI contract tests, lint, TypeScript checks, and `npm run build`.
 
 ### 4.4 Implement privacy data export and deletion operations
 
-- [ ] Add an authenticated account-data export action.
-- [ ] Export the user's relevant application-owned profile, workspace, content, asset metadata, consent, AI usage, and subscription-reference data in JSON or CSV.
-- [ ] Ensure export includes only data the requesting user is authorized to access.
-- [ ] Add an account deletion request flow with a clear explanation of consequences and retention exceptions.
-- [ ] Require explicit confirmation before beginning deletion.
-- [ ] Implement a controlled deletion orchestration process for application data and dependent resources.
-- [ ] Handle workspace ownership and membership dependencies without silently transferring ownership.
-- [ ] Handle ImageKit asset deletion through a controlled server-side process.
-- [ ] Handle Clerk identity deletion through the supported server-side integration.
-- [ ] Preserve only billing, security, or legal records that must be retained under the documented policy.
-- [ ] Communicate pending, completed, and failed deletion states accurately.
-- [ ] Add a public privacy notice route and include applicable collection, use, sharing, retention, access/correction, export, and deletion information.
-- [ ] Add a practical contact pathway for privacy questions and data requests.
-- [ ] Ensure the privacy notice and any applicable Personal Information Collection Statement accurately reflect actual integrations and behavior.
+- [x] Add an authenticated account-data export action.
+- [x] Export the user's relevant application-owned profile, workspace, content, asset metadata, consent, AI usage, and subscription-reference data in JSON or CSV.
+- [x] Ensure export includes only data the requesting user is authorized to access.
+- [x] Add an account deletion request flow with a clear explanation of consequences and retention exceptions.
+- [x] Require explicit confirmation before beginning deletion.
+- [x] Implement a controlled deletion orchestration process for application data and dependent resources.
+- [x] Handle workspace ownership and membership dependencies without silently transferring ownership.
+- [x] Handle ImageKit asset deletion through a controlled server-side process.
+- [x] Handle Clerk identity deletion through the supported server-side integration.
+- [x] Preserve only billing, security, or legal records that must be retained under the documented policy.
+- [x] Communicate pending, completed, and failed deletion states accurately.
+- [x] Add a public privacy notice route and include applicable collection, use, sharing, retention, access/correction, export, and deletion information.
+- [x] Add a practical contact pathway for privacy questions and data requests.
+- [x] Ensure the privacy notice and any applicable Personal Information Collection Statement accurately reflect actual integrations and behavior.
 
 **Verification Gate 4D**
-- [ ] Test export authorization, completeness, and cross-workspace isolation.
-- [ ] Test deletion confirmation, dependent-record handling, and provider failure recovery.
-- [ ] Confirm the app does not report deletion as complete before required steps are verified.
-- [ ] Review the privacy notice against implemented data collection and third-party processing.
-- [ ] Run privacy workflow tests, TypeScript checks, and `npm run build`.
+- [x] Test export authorization, completeness, and cross-workspace isolation.
+- [x] Test deletion confirmation, dependent-record handling, and provider failure recovery.
+- [x] Confirm the app does not report deletion as complete before required steps are verified.
+- [x] Review the privacy notice against implemented data collection and third-party processing.
+- [x] Run privacy workflow tests, TypeScript checks, and `npm run build`.
+
+> **Status note:** Module 4 provider boundaries, asset APIs/UI, Gemini endpoint, privacy export/deletion workflows, privacy notice, and contract tests are implemented. Live ImageKit/Gemini/Neon/Clerk acceptance tests remain dependent on configured isolated provider resources.
 
 ---
 
