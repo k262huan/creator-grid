@@ -20,7 +20,10 @@ export async function POST(request: Request) {
     const [existing] = await getDb().select({ stripeCustomerId: subscriptions.stripeCustomerId }).from(subscriptions).where(and(eq(subscriptions.workspaceId, input.workspaceId), eq(subscriptions.planKey, planKey))).orderBy(subscriptions.updatedAt).limit(1);
     const stripe = getStripeClient();
     const customerId = existing?.stripeCustomerId ?? (await stripe.customers.create({ email: user.email, metadata: { workspaceId: input.workspaceId, userId: user.id } })).id;
-    const idempotencyKey = request.headers.get("Idempotency-Key") ?? `checkout:${input.workspaceId}:${planKey}:${new Date().toISOString().slice(0, 16)}`;
+    const suppliedIdempotencyKey = request.headers.get("Idempotency-Key");
+    const idempotencyKey = suppliedIdempotencyKey && /^[A-Za-z0-9._:-]{1,255}$/u.test(suppliedIdempotencyKey)
+      ? suppliedIdempotencyKey
+      : `checkout:${input.workspaceId}:${planKey}:${new Date().toISOString().slice(0, 16)}`;
     const session = await stripe.checkout.sessions.create({ mode: "subscription", customer: customerId, line_items: [{ price: getStripePriceId(planKey), quantity: 1 }], success_url: `${checkoutOrigin()}/app/settings?checkout=success`, cancel_url: `${checkoutOrigin()}/app/settings?checkout=cancelled`, client_reference_id: input.workspaceId, metadata: { workspaceId: input.workspaceId, userId: user.id, planKey }, subscription_data: { metadata: { workspaceId: input.workspaceId, userId: user.id, planKey } }, }, { idempotencyKey });
     if (!session.url) return NextResponse.json({ error: "Checkout session did not return a URL" }, { status: 502 });
     return NextResponse.json({ url: session.url });

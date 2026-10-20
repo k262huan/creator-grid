@@ -13,12 +13,12 @@
 - [x] Use the lockfile's package manager and pin dependencies through the lockfile.
 - [x] Use TypeScript strict mode, Zod validation, Drizzle ORM, and server-side authorization for privileged operations.
 - [x] Use server components by default; add client components only for required interactivity. Audited all eight client components: each requires state, browser APIs, event handlers, uploads, or interactive error/retry behavior.
-- [ ] Treat all client-supplied IDs, workspace IDs, plan identifiers, file metadata, and redirect values as untrusted.
+- [x] Treat all client-supplied IDs, workspace IDs, plan identifiers, file metadata, and redirect values as untrusted. Added strict UUID, enum, date, timezone, locale, upload filename/URL, plan, checkout status, and idempotency-key validation at server boundaries.
 - [x] Do not use hardcoded demo data as production functionality.
 - [x] Keep `.env.local`, credentials, tokens, signing secrets, and provider responses containing sensitive data out of source control and logs.
 - [x] Keep Stripe in test mode for all MVP work. Do not configure live payment processing.
 - [x] Do not implement external social publishing or Phase 2 features.
-- [ ] After each major task group, run the specified Verification Gate and fix failures before continuing.
+- [x] After each major task group, run the specified Verification Gate and fix failures before continuing. The server-component and untrusted-input groups passed lint, TypeScript, unit tests, and production builds.
 
 > **Status note:** The reusable server-only authorization boundary is implemented and tested; Clerk session integration and route middleware remain separate pending tasks in Module 3.
 

@@ -1,12 +1,14 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
 
+import { and, desc, eq } from "drizzle-orm";
 import { getDb } from "@/db";
+import { subscriptions } from "@/db/schema";
 import { requireApplicationUser } from "@/lib/auth";
 import { requireWorkspaceMember, createWorkspaceAuthorizationStore } from "@/lib/authorization";
 import { toApiErrorResponse } from "@/lib/api-errors";
 import { createImageKitUploadAuth, validateAssetInput } from "@/lib/imagekit";
-import { getPlanConfig } from "@/lib/plans";
+import { resolveEntitlements } from "@/lib/plans";
 
 const requestSchema = z.object({
   workspaceId: z.string().uuid(),
@@ -19,7 +21,9 @@ export async function POST(request: Request) {
     const user = await requireApplicationUser();
     const input = requestSchema.parse(await request.json());
     await requireWorkspaceMember(createWorkspaceAuthorizationStore(getDb()), user.id, input.workspaceId);
-    validateAssetInput(input, getPlanConfig().free.maxUploadSizeBytes);
+    const [subscription] = await getDb().select({ planKey: subscriptions.planKey, status: subscriptions.status, currentPeriodEnd: subscriptions.currentPeriodEnd })
+      .from(subscriptions).where(eq(subscriptions.workspaceId, input.workspaceId)).orderBy(desc(subscriptions.updatedAt)).limit(1);
+    validateAssetInput(input, resolveEntitlements(subscription).maxUploadSizeBytes);
 
     return NextResponse.json({
       ...createImageKitUploadAuth(),

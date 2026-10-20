@@ -3,13 +3,12 @@ import { NextResponse } from "next/server";
 import { z } from "zod";
 
 import { getDb } from "@/db";
-import { assets, workspaceMembers } from "@/db/schema";
+import { assets, subscriptions, workspaceMembers } from "@/db/schema";
 import { toApiErrorResponse } from "@/lib/api-errors";
 import { requireApplicationUser } from "@/lib/auth";
 import { createWorkspaceAuthorizationStore, requireWorkspaceMember } from "@/lib/authorization";
-import { validateAssetInput } from "@/lib/imagekit";
-import { getServerEnv } from "@/lib/env";
-import { getPlanConfig } from "@/lib/plans";
+import { isConfiguredImageKitUrl, validateAssetFileName, validateAssetInput } from "@/lib/imagekit";
+import { resolveEntitlements } from "@/lib/plans";
 
 const assetSchema = z.object({
   workspaceId: z.string().uuid(),
@@ -52,11 +51,13 @@ export async function POST(request: Request) {
   try {
     const user = await requireApplicationUser();
     const input = assetSchema.parse(await request.json());
-    const env = getServerEnv();
-    if (!input.fileUrl.startsWith(env.NEXT_PUBLIC_IMAGEKIT_URL_ENDPOINT)) {
+    if (!isConfiguredImageKitUrl(input.fileUrl)) {
       return NextResponse.json({ error: "Asset URL is not from the configured ImageKit endpoint" }, { status: 400 });
     }
-    validateAssetInput(input, getPlanConfig().free.maxUploadSizeBytes);
+    validateAssetFileName(input.fileName);
+    const [subscription] = await getDb().select({ planKey: subscriptions.planKey, status: subscriptions.status, currentPeriodEnd: subscriptions.currentPeriodEnd })
+      .from(subscriptions).where(eq(subscriptions.workspaceId, input.workspaceId)).orderBy(desc(subscriptions.updatedAt)).limit(1);
+    validateAssetInput(input, resolveEntitlements(subscription).maxUploadSizeBytes);
     await requireWorkspaceMember(createWorkspaceAuthorizationStore(getDb()), user.id, input.workspaceId);
 
     const [asset] = await getDb().insert(assets).values({
@@ -75,7 +76,7 @@ export async function POST(request: Request) {
     return NextResponse.json({ asset: existing, duplicate: true });
   } catch (error) {
     if (error instanceof z.ZodError) return NextResponse.json({ error: "Invalid asset metadata" }, { status: 400 });
-    if (error instanceof Error && (error.message.startsWith("Unsupported") || error.message.startsWith("Asset exceeds"))) {
+    if (error instanceof Error && (error.message.startsWith("Unsupported") || error.message.startsWith("Asset exceeds") || error.message.startsWith("Invalid asset filename"))) {
       return NextResponse.json({ error: error.message }, { status: 400 });
     }
     return toApiErrorResponse(error);

@@ -1,7 +1,7 @@
 import { readFileSync } from "node:fs";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-import { createImageKitUploadAuth, validateAssetInput } from "../src/lib/imagekit";
+import { createImageKitUploadAuth, isConfiguredImageKitUrl, validateAssetFileName, validateAssetInput } from "../src/lib/imagekit";
 import { generateWithGemini } from "../src/lib/gemini";
 
 beforeEach(() => {
@@ -39,6 +39,13 @@ describe("ImageKit boundary", () => {
     expect(auth).toMatchObject({ publicKey: "public_imagekit", expire: 1_700_000_600 });
     expect(auth.signature).toHaveLength(40);
     expect(JSON.stringify(auth)).not.toContain("private_imagekit");
+  });
+
+  it("accepts only URLs below the configured ImageKit endpoint and safe filenames", () => {
+    expect(isConfiguredImageKitUrl("https://ik.imagekit.io/example/folder/file.png")).toBe(true);
+    expect(isConfiguredImageKitUrl("https://ik.imagekit.io.evil.example/example/file.png")).toBe(false);
+    expect(() => validateAssetFileName("../secret.txt")).toThrow("filename");
+    expect(() => validateAssetFileName("safe-file.png")).not.toThrow();
   });
 });
 

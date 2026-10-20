@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { and, eq, gte, lt } from "drizzle-orm";
+import { z } from "zod";
 
 import { getDb } from "@/db";
 import { contentItems } from "@/db/schema";
@@ -11,11 +12,12 @@ import { rescheduleContentAction } from "@/app/app/content/actions";
 
 export const dynamic = "force-dynamic";
 
+const monthSchema = z.string().regex(/^\d{4}-(0[1-9]|1[0-2])$/);
 function monthStart(value?: string) { const date = value ? new Date(`${value}-01T00:00:00Z`) : new Date(); return new Date(Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), 1)); }
 function dateKey(date: Date) { return date.toISOString().slice(0, 10); }
 
 export default async function CalendarPage({ searchParams }: { searchParams: Promise<Record<string, string | string[] | undefined>> }) {
-  const { workspace } = await initializeCurrentUserWorkspace(); const user = await requireApplicationUser(); await requireWorkspaceMember(createWorkspaceAuthorizationStore(getDb()), user.id, workspace.id); const params = await searchParams; const month = monthStart(typeof params.month === "string" ? params.month : undefined); const next = new Date(Date.UTC(month.getUTCFullYear(), month.getUTCMonth() + 1, 1)); const previous = new Date(Date.UTC(month.getUTCFullYear(), month.getUTCMonth() - 1, 1));
+  const { workspace } = await initializeCurrentUserWorkspace(); const user = await requireApplicationUser(); await requireWorkspaceMember(createWorkspaceAuthorizationStore(getDb()), user.id, workspace.id); const params = await searchParams; const requestedMonth = typeof params.month === "string" && monthSchema.safeParse(params.month).success ? params.month : undefined; const month = monthStart(requestedMonth); const next = new Date(Date.UTC(month.getUTCFullYear(), month.getUTCMonth() + 1, 1)); const previous = new Date(Date.UTC(month.getUTCFullYear(), month.getUTCMonth() - 1, 1));
   const scheduled = await getDb().select().from(contentItems).where(and(eq(contentItems.workspaceId, workspace.id), gte(contentItems.scheduledAt, month), lt(contentItems.scheduledAt, next))).orderBy(contentItems.scheduledAt);
   const unscheduled = await getDb().select().from(contentItems).where(and(eq(contentItems.workspaceId, workspace.id), eq(contentItems.status, "idea"))).limit(10);
   const firstDay = month.getUTCDay(); const days = new Date(Date.UTC(month.getUTCFullYear(), month.getUTCMonth() + 1, 0)).getUTCDate(); const cells = Array.from({ length: firstDay + days }, (_, index) => index < firstDay ? null : index - firstDay + 1);

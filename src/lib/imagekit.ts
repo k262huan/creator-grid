@@ -26,6 +26,22 @@ export function validateAssetInput(input: { mimeType: string; fileSizeBytes: num
   }
 }
 
+export function isConfiguredImageKitUrl(value: string): boolean {
+  const endpoint = new URL(getServerEnv().NEXT_PUBLIC_IMAGEKIT_URL_ENDPOINT);
+  const candidate = new URL(value);
+  const endpointPath = endpoint.pathname.endsWith("/") ? endpoint.pathname : `${endpoint.pathname}/`;
+  return candidate.protocol === endpoint.protocol
+    && candidate.hostname === endpoint.hostname
+    && candidate.port === endpoint.port
+    && candidate.pathname.startsWith(endpointPath);
+}
+
+export function validateAssetFileName(fileName: string): void {
+  if (/^[.\s]|[\u0000-\u001f\u007f]/u.test(fileName) || fileName.includes("/") || fileName.includes("\\")) {
+    throw new Error("Invalid asset filename");
+  }
+}
+
 export function createImageKitUploadAuth(nowSeconds = Math.floor(Date.now() / 1000)) {
   const env = getServerEnv();
   const token = crypto.randomUUID();

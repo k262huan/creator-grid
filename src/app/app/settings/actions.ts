@@ -15,6 +15,14 @@ const settingsSchema = z.object({
   marketingConsent: z.boolean(),
 });
 
+function isValidTimezone(value: string): boolean {
+  try { new Intl.DateTimeFormat("en", { timeZone: value }).format(); return true; } catch { return false; }
+}
+
+function isValidLocale(value: string): boolean {
+  try { return Intl.getCanonicalLocales(value).length === 1; } catch { return false; }
+}
+
 export async function updateAccountSettings(formData: FormData) {
   const input = settingsSchema.parse({
     displayName: String(formData.get("displayName") ?? "").trim() || null,
@@ -23,6 +31,9 @@ export async function updateAccountSettings(formData: FormData) {
     privacyNoticeAccepted: formData.get("privacyNoticeAccepted") === "on",
     marketingConsent: formData.get("marketingConsent") === "on",
   });
+
+  if (!isValidTimezone(input.timezone)) throw new Error("Invalid timezone");
+  if (!isValidLocale(input.locale)) throw new Error("Invalid locale");
 
   await withAuthorizedTransaction(async (tx, user) => {
     const now = new Date();
